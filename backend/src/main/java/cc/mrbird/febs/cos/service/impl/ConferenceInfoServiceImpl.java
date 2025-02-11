@@ -1,7 +1,7 @@
 package cc.mrbird.febs.cos.service.impl;
 
 import cc.mrbird.febs.cos.entity.ConferenceInfo;
-import cc.mrbird.febs.cos.mapper.ConferenceInfoMapper;
+import cc.mrbird.febs.cos.dao.ConferenceInfoMapper;
 import cc.mrbird.febs.cos.service.IConferenceInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;

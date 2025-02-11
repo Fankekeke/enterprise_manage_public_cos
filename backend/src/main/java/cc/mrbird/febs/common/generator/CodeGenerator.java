@@ -23,7 +23,7 @@ import java.util.Scanner;
 public class CodeGenerator {
 
     // 数据库 URL
-    private static final String URL = "jdbc:mysql://127.0.0.1:3306/enterprise_order_cos?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    private static final String URL = "jdbc:mysql://127.0.0.1:3307/enterprise_manage_public_cos?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     // 数据库驱动
     private static final String DRIVER_NAME = "com.mysql.cj.jdbc.Driver";
     // 数据库用户名
@@ -31,7 +31,7 @@ public class CodeGenerator {
     // 数据库密码
     private static final String PASSWORD = "123456";
     // @author 值
-    private static final String AUTHOR = "FanK";
+    private static final String AUTHOR = "FanK fan1ke2ke@gmail.com";
     // 包的基础路径
     private static final String BASE_PACKAGE_URL = "cc.mrbird.febs";
     // xml文件路径
