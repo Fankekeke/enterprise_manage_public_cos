@@ -6,6 +6,7 @@ import cc.mrbird.febs.cos.entity.MerchantInfo;
 import cc.mrbird.febs.cos.entity.MessageInfo;
 import cc.mrbird.febs.cos.service.IMerchantInfoService;
 import cc.mrbird.febs.cos.service.IMessageInfoService;
+import cc.mrbird.febs.cos.service.IStaffInfoService;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -26,7 +27,7 @@ public class MessageInfoController {
 
     private final IMessageInfoService messageInfoService;
 
-    private final IMerchantInfoService merchantInfoService;
+    private final IStaffInfoService staffInfoService;
 
     /**
      * 分页获取消息信息
