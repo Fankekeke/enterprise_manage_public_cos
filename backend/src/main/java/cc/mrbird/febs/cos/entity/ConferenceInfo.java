@@ -2,6 +2,9 @@ package cc.mrbird.febs.cos.entity;
 
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -17,6 +20,9 @@ import lombok.experimental.Accessors;
 public class ConferenceInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @TableId(value = "ID", type = IdType.AUTO)
+    private Integer id;
 
     /**
      * 创建人
@@ -46,12 +52,12 @@ public class ConferenceInfo implements Serializable {
     /**
      * 开始时间
      */
-    private LocalDateTime startTime;
+    private String startTime;
 
     /**
      * 结束时间
      */
-    private LocalDateTime endTime;
+    private String endTime;
 
     /**
      * 会议邀请人
@@ -61,7 +67,7 @@ public class ConferenceInfo implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createDate;
+    private String createDate;
 
 
 }

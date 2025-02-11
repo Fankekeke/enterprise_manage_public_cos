@@ -103,6 +103,11 @@ public class StaffInfo implements Serializable {
     private Integer deptId;
 
     /**
+     * 用户ID
+     */
+    private Integer userId;
+
+    /**
      * 岗位管理
      */
     private Integer positionId;

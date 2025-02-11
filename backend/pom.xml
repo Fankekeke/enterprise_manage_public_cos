@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cc.mrbird</groupId>
-    <artifactId>Order-Platform</artifactId>
+    <artifactId>Enterprise-Platform</artifactId>
     <version>1.0.0-release</version>
     <packaging>jar</packaging>
 
-    <name>Complaint-Platform</name>
-    <description>Complaint-Platform</description>
+    <name>Enterprise-Platform</name>
+    <description>Enterprise-Platform</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

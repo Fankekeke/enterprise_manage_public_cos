@@ -2,9 +2,8 @@ package cc.mrbird.febs.cos.controller;
 
 
 import cc.mrbird.febs.common.utils.R;
-import cc.mrbird.febs.cos.entity.MerchantInfo;
 import cc.mrbird.febs.cos.entity.MessageInfo;
-import cc.mrbird.febs.cos.service.IMerchantInfoService;
+import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.IMessageInfoService;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
 import cn.hutool.core.date.DateUtil;
@@ -74,8 +73,8 @@ public class MessageInfoController {
      */
     @GetMapping("/getMessageDetail")
     public R getMessageDetail(@RequestParam(value = "takeUser") Integer takeUser, @RequestParam(value = "sendUser") Integer sendUser, @RequestParam(value = "userId") Integer userId) {
-        MerchantInfo merchantInfo = merchantInfoService.getOne(Wrappers.<MerchantInfo>lambdaQuery().eq(MerchantInfo::getUserId, userId));
-        if (takeUser.equals(merchantInfo.getUserId())) {
+        StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, userId));
+        if (takeUser.equals(staffInfo.getUserId())) {
             messageInfoService.update(Wrappers.<MessageInfo>lambdaUpdate().set(MessageInfo::getTaskStatus, 1)
                     .eq(MessageInfo::getTakeUser, takeUser).eq(MessageInfo::getSendUser, sendUser));
         } else {
@@ -93,8 +92,8 @@ public class MessageInfoController {
      */
     @GetMapping("/messageListById")
     public R messageListById(@RequestParam Integer userId) {
-        MerchantInfo merchantInfo = merchantInfoService.getOne(Wrappers.<MerchantInfo>lambdaQuery().eq(MerchantInfo::getUserId, userId));
-        return R.ok(messageInfoService.messageListById(merchantInfo.getUserInfoId()));
+        StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, userId));
+        return R.ok(messageInfoService.messageListById(staffInfo.getUserId()));
     }
 
     /**

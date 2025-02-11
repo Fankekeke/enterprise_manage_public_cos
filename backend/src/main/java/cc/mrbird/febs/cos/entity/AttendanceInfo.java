@@ -2,6 +2,9 @@ package cc.mrbird.febs.cos.entity;
 
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -18,6 +21,9 @@ public class AttendanceInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId(value = "ID", type = IdType.AUTO)
+    private Integer id;
+
     /**
      * 所属员工
      */
@@ -26,12 +32,12 @@ public class AttendanceInfo implements Serializable {
     /**
      * 上班打卡时间
      */
-    private LocalDateTime putTakeDate;
+    private String putTakeDate;
 
     /**
      * 下班打卡时间
      */
-    private LocalDateTime outTakeDate;
+    private String outTakeDate;
 
 
 }
