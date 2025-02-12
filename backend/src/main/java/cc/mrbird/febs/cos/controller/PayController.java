@@ -34,9 +34,6 @@ public class PayController {
     private PayService payService;
 
     @Resource
-    private IOrderInfoService orderInfoService;
-
-    @Resource
     private IUserInfoService userInfoService;
 
     @Resource
@@ -45,61 +42,61 @@ public class PayController {
     @Resource
     private IMailService mailService;
 
-    /**
-     * 支付宝支付回调
-     *
-     * @param orderCode 订单编号
-     * @return 结果
-     */
-    @GetMapping(value = "/rollback")
-    public R alipayRollback(String orderCode) {
-
-        // 获取订单信息
-        OrderInfo orderInfo = null;
-        if (orderCode.contains("OD")) {
-            orderInfo = orderInfoService.getOne(Wrappers.<OrderInfo>lambdaQuery().eq(OrderInfo::getCode, orderCode));
-        }
-        if (orderCode.contains("OWE")) {
-            orderInfo = orderInfoService.getOne(Wrappers.<OrderInfo>lambdaQuery().eq(OrderInfo::getOweCode, orderCode));
-        }
-        if (orderInfo == null) {
-            return R.ok(false);
-        }
-        // 获取用户信息
-        UserInfo user = userInfoService.getById(orderInfo.getUserId());
-
-        String typeStr = "";
-        if ("0".equals(orderInfo.getType())) {
-            orderInfo.setPayDate(DateUtil.formatDateTime(new Date()));
-            orderInfo.setStatus("3");
-            user.setPrice(NumberUtil.add(user.getPrice(), orderInfo.getTotalPrice()));
-        } else if ("1".equals(orderInfo.getType()) && "0".equals(orderInfo.getStatus())) {
-            orderInfo.setPayDate(DateUtil.formatDateTime(new Date()));
-            orderInfo.setStatus("1");
-            user.setPrice(NumberUtil.add(user.getPrice(), orderInfo.getSubsistPrice()));
-            typeStr = "预付款";
-        } else if ("1".equals(orderInfo.getType()) && StrUtil.isEmpty(orderInfo.getOweDate())) {
-            orderInfo.setOweDate(DateUtil.formatDateTime(new Date()));
-            orderInfo.setStatus("3");
-            user.setPrice(NumberUtil.add(user.getPrice(), orderInfo.getOwePrice()));
-            typeStr = "尾款";
-        }
-        // 发送邮件
-        if (StrUtil.isNotEmpty(user.getEmail())) {
-            Context context = new Context();
-            context.setVariable("today", DateUtil.formatDate(new Date()));
-            context.setVariable("custom", user.getName() + "，您好。您的订单 " + orderInfo.getCode() + " " + typeStr + "已缴纳，请注意查看");
-            String emailContent = templateEngine.process("registerEmail", context);
-            mailService.sendHtmlMail(user.getEmail(), DateUtil.formatDate(new Date()) + "订单缴费通知", emailContent);
-        }
-        Context context = new Context();
-        context.setVariable("today", DateUtil.formatDate(new Date()));
-        context.setVariable("custom", "用户：" + user.getName() + "，订单 " + orderInfo.getCode() + " " + typeStr + "已缴纳，请注意查看");
-        String emailContent = templateEngine.process("registerEmail", context);
-        mailService.sendHtmlMail("fan1ke2ke@gmail.com", DateUtil.formatDate(new Date()) + "订单缴费通知-管理员", emailContent);
-        userInfoService.updateById(user);
-        return R.ok(orderInfoService.updateById(orderInfo));
-    }
+//    /**
+//     * 支付宝支付回调
+//     *
+//     * @param orderCode 订单编号
+//     * @return 结果
+//     */
+//    @GetMapping(value = "/rollback")
+//    public R alipayRollback(String orderCode) {
+//
+//        // 获取订单信息
+//        OrderInfo orderInfo = null;
+//        if (orderCode.contains("OD")) {
+//            orderInfo = orderInfoService.getOne(Wrappers.<OrderInfo>lambdaQuery().eq(OrderInfo::getCode, orderCode));
+//        }
+//        if (orderCode.contains("OWE")) {
+//            orderInfo = orderInfoService.getOne(Wrappers.<OrderInfo>lambdaQuery().eq(OrderInfo::getOweCode, orderCode));
+//        }
+//        if (orderInfo == null) {
+//            return R.ok(false);
+//        }
+//        // 获取用户信息
+//        UserInfo user = userInfoService.getById(orderInfo.getUserId());
+//
+//        String typeStr = "";
+//        if ("0".equals(orderInfo.getType())) {
+//            orderInfo.setPayDate(DateUtil.formatDateTime(new Date()));
+//            orderInfo.setStatus("3");
+//            user.setPrice(NumberUtil.add(user.getPrice(), orderInfo.getTotalPrice()));
+//        } else if ("1".equals(orderInfo.getType()) && "0".equals(orderInfo.getStatus())) {
+//            orderInfo.setPayDate(DateUtil.formatDateTime(new Date()));
+//            orderInfo.setStatus("1");
+//            user.setPrice(NumberUtil.add(user.getPrice(), orderInfo.getSubsistPrice()));
+//            typeStr = "预付款";
+//        } else if ("1".equals(orderInfo.getType()) && StrUtil.isEmpty(orderInfo.getOweDate())) {
+//            orderInfo.setOweDate(DateUtil.formatDateTime(new Date()));
+//            orderInfo.setStatus("3");
+//            user.setPrice(NumberUtil.add(user.getPrice(), orderInfo.getOwePrice()));
+//            typeStr = "尾款";
+//        }
+//        // 发送邮件
+//        if (StrUtil.isNotEmpty(user.getEmail())) {
+//            Context context = new Context();
+//            context.setVariable("today", DateUtil.formatDate(new Date()));
+//            context.setVariable("custom", user.getName() + "，您好。您的订单 " + orderInfo.getCode() + " " + typeStr + "已缴纳，请注意查看");
+//            String emailContent = templateEngine.process("registerEmail", context);
+//            mailService.sendHtmlMail(user.getEmail(), DateUtil.formatDate(new Date()) + "订单缴费通知", emailContent);
+//        }
+//        Context context = new Context();
+//        context.setVariable("today", DateUtil.formatDate(new Date()));
+//        context.setVariable("custom", "用户：" + user.getName() + "，订单 " + orderInfo.getCode() + " " + typeStr + "已缴纳，请注意查看");
+//        String emailContent = templateEngine.process("registerEmail", context);
+//        mailService.sendHtmlMail("fan1ke2ke@gmail.com", DateUtil.formatDate(new Date()) + "订单缴费通知-管理员", emailContent);
+//        userInfoService.updateById(user);
+//        return R.ok(orderInfoService.updateById(orderInfo));
+//    }
 
     /**
      * 阿里支付

@@ -35,7 +35,7 @@ public class AgentInfoController {
      */
     @GetMapping("/page")
     public R page(Page<AgentInfo> page, AgentInfo agentInfo) {
-        return R.ok();
+        return R.ok(agentInfoService.queryAgentPage(page, agentInfo));
     }
 
     /**

@@ -34,7 +34,7 @@ public class AttendanceInfoController {
      */
     @GetMapping("/page")
     public R page(Page<AttendanceInfo> page, AttendanceInfo attendanceInfo) {
-        return R.ok();
+        return R.ok(attendanceInfoService.queryAttendancePage(page, attendanceInfo));
     }
 
     /**

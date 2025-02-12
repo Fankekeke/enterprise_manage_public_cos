@@ -32,7 +32,7 @@ public class ConferenceInfoController {
      */
     @GetMapping("/page")
     public R page(Page<ConferenceInfo> page, ConferenceInfo conferenceInfo) {
-        return R.ok();
+        return R.ok(conferenceInfoService.queryConferencePage(page, conferenceInfo));
     }
 
     /**
