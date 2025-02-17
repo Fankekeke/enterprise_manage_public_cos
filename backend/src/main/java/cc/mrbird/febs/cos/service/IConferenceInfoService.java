@@ -23,4 +23,12 @@ public interface IConferenceInfoService extends IService<ConferenceInfo> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> queryConferencePage(Page<ConferenceInfo> page, ConferenceInfo conferenceInfo);
+
+    /**
+     * 查询会议记录详情
+     *
+     * @param id 主键ID
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> queryDetail(Integer id);
 }

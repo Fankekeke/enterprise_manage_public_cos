@@ -3,7 +3,10 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.ConferenceInfo;
+import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.IConferenceInfoService;
+import cc.mrbird.febs.cos.service.IStaffInfoService;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ import java.util.List;
 public class ConferenceInfoController {
 
     private final IConferenceInfoService conferenceInfoService;
+
+    private final IStaffInfoService staffInfoService;
 
     /**
      * 分页获取会议记录
@@ -43,7 +48,7 @@ public class ConferenceInfoController {
      */
     @GetMapping("/{id}")
     public R detail(@PathVariable("id") Integer id) {
-        return R.ok(conferenceInfoService.getById(id));
+        return R.ok(conferenceInfoService.queryDetail(id));
     }
 
     /**
@@ -64,6 +69,10 @@ public class ConferenceInfoController {
      */
     @PostMapping
     public R save(ConferenceInfo conferenceInfo) {
+        StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, conferenceInfo.getStaffId()));
+        if (staffInfo != null) {
+            conferenceInfo.setStaffId(staffInfo.getId());
+        }
         return R.ok(conferenceInfoService.save(conferenceInfo));
     }
 

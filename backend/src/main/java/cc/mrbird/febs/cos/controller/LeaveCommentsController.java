@@ -3,8 +3,10 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.LeaveComments;
+import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.entity.UserInfo;
 import cc.mrbird.febs.cos.service.ILeaveCommentsService;
+import cc.mrbird.febs.cos.service.IStaffInfoService;
 import cc.mrbird.febs.cos.service.IUserInfoService;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -27,6 +29,9 @@ public class LeaveCommentsController {
     private final ILeaveCommentsService leaveCommentsService;
 
     private final IUserInfoService userInfoService;
+
+    private final IStaffInfoService staffInfoService;
+
 
     /**
      * 分页获取留言信息
@@ -70,8 +75,10 @@ public class LeaveCommentsController {
     @PostMapping
     public R save(LeaveComments leaveComments) {
         // 设置用户ID
-        UserInfo user = userInfoService.getOne(Wrappers.<UserInfo>lambdaQuery().eq(UserInfo::getUserId, leaveComments.getUserId()));
-        leaveComments.setUserId(user.getId());
+        StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, leaveComments.getUserId()));
+        if (staffInfo != null) {
+            leaveComments.setUserId(staffInfo.getId());
+        }
         leaveComments.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(leaveCommentsService.save(leaveComments));
     }

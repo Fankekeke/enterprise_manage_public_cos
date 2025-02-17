@@ -3,8 +3,11 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.AttendanceInfo;
+import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.IAttendanceInfoService;
+import cc.mrbird.febs.cos.service.IStaffInfoService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,8 @@ import java.util.List;
 public class AttendanceInfoController {
 
     private final IAttendanceInfoService attendanceInfoService;
+
+    private final IStaffInfoService staffInfoService;
 
     /**
      * 分页获取考勤打卡
@@ -66,6 +71,10 @@ public class AttendanceInfoController {
      */
     @PostMapping
     public R save(AttendanceInfo attendanceInfo) {
+        StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, attendanceInfo.getStaffId()));
+        if (staffInfo != null) {
+            attendanceInfo.setStaffId(staffInfo.getId());
+        }
         return R.ok(attendanceInfoService.save(attendanceInfo));
     }
 
