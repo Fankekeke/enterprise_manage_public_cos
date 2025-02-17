@@ -2,12 +2,18 @@ package cc.mrbird.febs.cos.service.impl;
 
 import cc.mrbird.febs.cos.entity.NotifyInfo;
 import cc.mrbird.febs.cos.dao.NotifyInfoMapper;
+import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.INotifyInfoService;
+import cc.mrbird.febs.cos.service.IStaffInfoService;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -15,7 +21,10 @@ import java.util.List;
  * @author FanK fan1ke2ke@gmail.com
  */
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class NotifyInfoServiceImpl extends ServiceImpl<NotifyInfoMapper, NotifyInfo> implements INotifyInfoService {
+
+    private final IStaffInfoService staffInfoService;
 
     /**
      * 分页获取消息通知信息
@@ -27,6 +36,31 @@ public class NotifyInfoServiceImpl extends ServiceImpl<NotifyInfoMapper, NotifyI
     @Override
     public IPage<LinkedHashMap<String, Object>> queryNotifyPage(Page<NotifyInfo> page, NotifyInfo notifyInfo) {
         return baseMapper.queryNotifyPage(page, notifyInfo);
+    }
+
+    /**
+     * 添加消息通知
+     *
+     * @param userId  用户ID
+     * @param content 内容
+     * @return 结果
+     */
+    @Override
+    public boolean addNotify(Integer userId, String content) {
+        // 获取员工信息
+        StaffInfo staffInfo = staffInfoService.getById(userId);
+        if (staffInfo == null) {
+            return false;
+        }
+
+        NotifyInfo notifyInfo = new NotifyInfo();
+        notifyInfo.setUserCode(staffInfo.getCode());
+        notifyInfo.setUserId(staffInfo.getId());
+        notifyInfo.setContent(content);
+        notifyInfo.setDelFlag(0);
+        notifyInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+
+        return this.save(notifyInfo);
     }
 
     /**

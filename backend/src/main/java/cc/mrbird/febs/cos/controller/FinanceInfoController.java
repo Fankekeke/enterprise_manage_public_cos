@@ -5,6 +5,7 @@ import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.FinanceInfo;
 import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.IFinanceInfoService;
+import cc.mrbird.febs.cos.service.INotifyInfoService;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -29,6 +30,8 @@ public class FinanceInfoController {
     private final IFinanceInfoService financeInfoService;
 
     private final IStaffInfoService staffInfoService;
+
+    private final INotifyInfoService notifyInfoService;
 
     /**
      * 分页获取财务申请
@@ -77,6 +80,8 @@ public class FinanceInfoController {
         }
         financeInfo.setStatus("0");
         financeInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        // 添加通知
+        notifyInfoService.addNotify(financeInfo.getStaffId(), "您好，您申请的" + financeInfo.getAuditTitle() + "申请已提交，请耐心等待审核！");
         return R.ok(financeInfoService.save(financeInfo));
     }
 

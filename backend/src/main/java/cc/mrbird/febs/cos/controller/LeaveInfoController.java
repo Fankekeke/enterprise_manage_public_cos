@@ -5,6 +5,7 @@ import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.LeaveInfo;
 import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.ILeaveInfoService;
+import cc.mrbird.febs.cos.service.INotifyInfoService;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -27,6 +28,8 @@ public class LeaveInfoController {
     private final ILeaveInfoService leaveInfoService;
 
     private final IStaffInfoService staffInfoService;
+
+    private final INotifyInfoService notifyInfoService;
 
     /**
      * 分页获取请假信息
@@ -87,6 +90,8 @@ public class LeaveInfoController {
         }
         leaveInfo.setStatus("0");
         leaveInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        // 添加通知
+        notifyInfoService.addNotify(leaveInfo.getStaffId(), "您好，您的请假已提交，请耐心等待审核！");
         return R.ok(leaveInfoService.save(leaveInfo));
     }
 

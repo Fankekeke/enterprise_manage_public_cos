@@ -24,6 +24,15 @@ public interface INotifyInfoService extends IService<NotifyInfo> {
     IPage<LinkedHashMap<String, Object>> queryNotifyPage(Page<NotifyInfo> page, NotifyInfo notifyInfo);
 
     /**
+     * 添加消息通知
+     *
+     * @param userId  用户ID
+     * @param content 内容
+     * @return 结果
+     */
+    boolean addNotify(Integer userId, String content);
+
+    /**
      * 根据用户ID获取消息通知信息
      *
      * @param userId 用户ID

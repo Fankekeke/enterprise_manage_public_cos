@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * 考勤管理 service层
@@ -18,9 +19,33 @@ public interface IAttendanceInfoService extends IService<AttendanceInfo> {
     /**
      * 分页获取考勤打卡
      *
-     * @param page      分页对象
+     * @param page           分页对象
      * @param attendanceInfo 考勤打卡
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> queryAttendancePage(Page<AttendanceInfo> page, AttendanceInfo attendanceInfo);
+
+    /**
+     * 根据员工ID查询考勤打卡
+     *
+     * @param staffId 员工ID
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> queryAttendanceByStaff(Integer staffId);
+
+    /**
+     * 考勤打卡
+     *
+     * @param attendanceInfo 打卡信息
+     * @return 结果
+     */
+    boolean checkWork(AttendanceInfo attendanceInfo);
+
+    /**
+     * 获取当天打卡状态
+     *
+     * @param staffId 员工ID
+     * @return 结果
+     */
+    AttendanceInfo checkWorkByToday(Integer staffId);
 }

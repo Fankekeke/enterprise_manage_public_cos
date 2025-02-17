@@ -33,7 +33,7 @@ public class AttendanceInfoController {
     /**
      * 分页获取考勤打卡
      *
-     * @param page      分页对象
+     * @param page           分页对象
      * @param attendanceInfo 考勤打卡
      * @return 结果
      */
@@ -54,6 +54,17 @@ public class AttendanceInfoController {
     }
 
     /**
+     * 根据员工ID查询考勤打卡
+     *
+     * @param staffId 员工ID
+     * @return 结果
+     */
+    @GetMapping("/queryAttendanceByStaff")
+    public R queryAttendanceByStaff(@RequestParam(value = "staffId") Integer staffId) {
+        return R.ok(attendanceInfoService.queryAttendanceByStaff(staffId));
+    }
+
+    /**
      * 查询考勤打卡列表
      *
      * @return 结果
@@ -71,11 +82,18 @@ public class AttendanceInfoController {
      */
     @PostMapping
     public R save(AttendanceInfo attendanceInfo) {
-        StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, attendanceInfo.getStaffId()));
-        if (staffInfo != null) {
-            attendanceInfo.setStaffId(staffInfo.getId());
-        }
-        return R.ok(attendanceInfoService.save(attendanceInfo));
+        return R.ok(attendanceInfoService.checkWork(attendanceInfo));
+    }
+
+    /**
+     * 获取当天打卡状态
+     *
+     * @param staffId 员工ID
+     * @return 结果
+     */
+    @GetMapping("/checkWorkByToday")
+    public R checkWorkByToday(@RequestParam(value = "staffId") Integer staffId) {
+        return R.ok(attendanceInfoService.checkWorkByToday(staffId));
     }
 
     /**

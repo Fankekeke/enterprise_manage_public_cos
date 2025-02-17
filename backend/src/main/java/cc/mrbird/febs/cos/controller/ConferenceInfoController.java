@@ -5,13 +5,16 @@ import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.ConferenceInfo;
 import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.IConferenceInfoService;
+import cc.mrbird.febs.cos.service.INotifyInfoService;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,6 +30,8 @@ public class ConferenceInfoController {
     private final IConferenceInfoService conferenceInfoService;
 
     private final IStaffInfoService staffInfoService;
+
+    private final INotifyInfoService notifyInfoService;
 
     /**
      * 分页获取会议记录
@@ -72,6 +77,13 @@ public class ConferenceInfoController {
         StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, conferenceInfo.getStaffId()));
         if (staffInfo != null) {
             conferenceInfo.setStaffId(staffInfo.getId());
+        }
+        List<String> staffIds = Arrays.asList(conferenceInfo.getStaffIds().split(","));
+        if (CollectionUtil.isNotEmpty(staffIds)) {
+            for (String staffId : staffIds) {
+                // 添加通知
+                notifyInfoService.addNotify(Integer.parseInt(staffId), "您好，“"+conferenceInfo.getTitle()+"”" + ", 会议在" + conferenceInfo.getStartTime() + "开始，请及时参与会议。");
+            }
         }
         return R.ok(conferenceInfoService.save(conferenceInfo));
     }
