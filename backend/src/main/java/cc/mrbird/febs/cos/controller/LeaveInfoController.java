@@ -82,7 +82,9 @@ public class LeaveInfoController {
     @PostMapping
     public R save(LeaveInfo leaveInfo) {
         StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, leaveInfo.getStaffId()));
-        leaveInfo.setStaffId(staffInfo.getId());
+        if (staffInfo != null) {
+            leaveInfo.setStaffId(staffInfo.getId());
+        }
         leaveInfo.setStatus("0");
         leaveInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(leaveInfoService.save(leaveInfo));

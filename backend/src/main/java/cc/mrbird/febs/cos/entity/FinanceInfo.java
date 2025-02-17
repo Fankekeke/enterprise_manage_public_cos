@@ -50,7 +50,7 @@ public class FinanceInfo implements Serializable {
     private String createDate;
 
     /**
-     * 请假图片
+     * 图片
      */
     private String images;
 

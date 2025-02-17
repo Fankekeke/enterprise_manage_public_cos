@@ -6,12 +6,14 @@ import cc.mrbird.febs.cos.entity.FinanceInfo;
 import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.IFinanceInfoService;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,7 +39,7 @@ public class FinanceInfoController {
      */
     @GetMapping("/page")
     public R page(Page<FinanceInfo> page, FinanceInfo financeInfo) {
-        return R.ok();
+        return R.ok(financeInfoService.queryFinancePage(page, financeInfo));
     }
 
     /**
@@ -73,7 +75,25 @@ public class FinanceInfoController {
         if (staffInfo != null) {
             financeInfo.setStaffId(staffInfo.getId());
         }
+        financeInfo.setStatus("0");
+        financeInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(financeInfoService.save(financeInfo));
+    }
+
+    /**
+     * 审核财务申请
+     *
+     * @param financeInfo 申请信息
+     * @return 结果
+     */
+    @PostMapping("/audit")
+    public R audit(FinanceInfo financeInfo) {
+        StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, financeInfo.getAuditId()));
+        if (staffInfo != null) {
+            financeInfo.setAuditId(staffInfo.getId());
+        }
+        financeInfo.setAuditDate(DateUtil.formatDateTime(new Date()));
+        return R.ok(financeInfoService.updateById(financeInfo));
     }
 
     /**
