@@ -44,7 +44,7 @@ public class LeaveInfoController {
     }
 
     /**
-     * 学生请假审批
+     * 请假审批
      *
      * @param id     主键
      * @param status 状态
