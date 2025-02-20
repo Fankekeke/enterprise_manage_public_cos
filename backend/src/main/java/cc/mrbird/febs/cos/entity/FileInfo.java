@@ -54,5 +54,9 @@ public class FileInfo implements Serializable {
      */
     private String createDate;
 
+    /**
+     * 所属企业
+     */
+    private Integer enterpriseId;
 
 }

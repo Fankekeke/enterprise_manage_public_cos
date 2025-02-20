@@ -2,9 +2,12 @@ package cc.mrbird.febs.cos.controller;
 
 
 import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.entity.EnterpriseInfo;
 import cc.mrbird.febs.cos.entity.FileInfo;
+import cc.mrbird.febs.cos.service.IEnterpriseInfoService;
 import cc.mrbird.febs.cos.service.IFileInfoService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,8 @@ import java.util.List;
 public class FileInfoController {
 
     private final IFileInfoService fileInfoService;
+
+    private final IEnterpriseInfoService enterpriseInfoService;
 
     /**
      * 分页获取共享文件
@@ -67,6 +72,9 @@ public class FileInfoController {
     @PostMapping
     public R save(FileInfo fileInfo) {
         fileInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        // 设置所属公司
+        EnterpriseInfo enterpriseInfo = enterpriseInfoService.getOne(Wrappers.<EnterpriseInfo>lambdaQuery().eq(EnterpriseInfo::getUserId, fileInfo.getEnterpriseId()));
+        fileInfo.setEnterpriseId(enterpriseInfo.getId());
         return R.ok(fileInfoService.save(fileInfo));
     }
 

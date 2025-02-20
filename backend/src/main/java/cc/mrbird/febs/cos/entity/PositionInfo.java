@@ -51,6 +51,11 @@ public class PositionInfo implements Serializable {
     private String createBy;
 
     /**
+     * 所属企业
+     */
+    private Integer enterpriseId;
+
+    /**
      * 删除标识
      */
     @TableLogic

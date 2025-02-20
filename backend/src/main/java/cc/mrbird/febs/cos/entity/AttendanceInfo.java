@@ -38,6 +38,4 @@ public class AttendanceInfo implements Serializable {
      * 下班打卡时间
      */
     private String outTakeDate;
-
-
 }

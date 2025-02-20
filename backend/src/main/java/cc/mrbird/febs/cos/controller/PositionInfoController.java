@@ -2,7 +2,9 @@ package cc.mrbird.febs.cos.controller;
 
 
 import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.entity.EnterpriseInfo;
 import cc.mrbird.febs.cos.entity.PositionInfo;
+import cc.mrbird.febs.cos.service.IEnterpriseInfoService;
 import cc.mrbird.febs.cos.service.IPositionInfoService;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -23,6 +25,8 @@ import java.util.List;
 public class PositionInfoController {
 
     private final IPositionInfoService positionInfoService;
+
+    private final IEnterpriseInfoService enterpriseInfoService;
 
     /**
      * 分页获取职位信息
@@ -67,6 +71,9 @@ public class PositionInfoController {
     public R save(PositionInfo positionInfo) {
         positionInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         positionInfo.setCode("POS-" + System.currentTimeMillis());
+        // 设置所属公司
+        EnterpriseInfo enterpriseInfo = enterpriseInfoService.getOne(Wrappers.<EnterpriseInfo>lambdaQuery().eq(EnterpriseInfo::getUserId, positionInfo.getEnterpriseId()));
+        positionInfo.setEnterpriseId(enterpriseInfo.getId());
         return R.ok(positionInfoService.save(positionInfo));
     }
 

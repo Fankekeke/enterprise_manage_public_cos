@@ -3,8 +3,10 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.AgentInfo;
+import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.IAgentInfoService;
 import cc.mrbird.febs.cos.service.INotifyInfoService;
+import cc.mrbird.febs.cos.service.IStaffInfoService;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -28,6 +30,8 @@ public class AgentInfoController {
     private final IAgentInfoService agentInfoService;
 
     private final INotifyInfoService notifyInfoService;
+
+    private final IStaffInfoService staffInfoService;
 
     /**
      * 分页获取代办任务
@@ -72,6 +76,9 @@ public class AgentInfoController {
     public R save(AgentInfo agentInfo) {
         notifyInfoService.addNotify(agentInfo.getStaffId(), "您好，您有新的任务已派发，请及时查看处理");
         agentInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        // 获取员工所属公司
+        StaffInfo staffInfo = staffInfoService.getById(agentInfo.getStaffId());
+        agentInfo.setEnterpriseId(staffInfo.getEnterpriseId());
         return R.ok(agentInfoService.save(agentInfo));
     }
 

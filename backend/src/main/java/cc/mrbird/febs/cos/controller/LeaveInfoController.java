@@ -87,6 +87,7 @@ public class LeaveInfoController {
         StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, leaveInfo.getStaffId()));
         if (staffInfo != null) {
             leaveInfo.setStaffId(staffInfo.getId());
+            leaveInfo.setEnterpriseId(staffInfo.getEnterpriseId());
         }
         leaveInfo.setStatus("0");
         leaveInfo.setCreateDate(DateUtil.formatDateTime(new Date()));

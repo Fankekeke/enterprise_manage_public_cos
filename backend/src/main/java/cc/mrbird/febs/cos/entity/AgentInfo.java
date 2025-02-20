@@ -54,5 +54,8 @@ public class AgentInfo implements Serializable {
      */
     private String complateDate;
 
-
+    /**
+     * 所属企业
+     */
+    private Integer enterpriseId;
 }

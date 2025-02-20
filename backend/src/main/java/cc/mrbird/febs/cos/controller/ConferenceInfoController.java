@@ -77,6 +77,8 @@ public class ConferenceInfoController {
         StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, conferenceInfo.getStaffId()));
         if (staffInfo != null) {
             conferenceInfo.setStaffId(staffInfo.getId());
+            // 获取员工所属公司
+            conferenceInfo.setEnterpriseId(staffInfo.getEnterpriseId());
         }
         List<String> staffIds = Arrays.asList(conferenceInfo.getStaffIds().split(","));
         if (CollectionUtil.isNotEmpty(staffIds)) {

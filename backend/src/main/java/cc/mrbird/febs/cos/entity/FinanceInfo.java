@@ -64,5 +64,10 @@ public class FinanceInfo implements Serializable {
      */
     private String auditDate;
 
+    /**
+     * 所属企业
+     */
+    private Integer enterpriseId;
+
 
 }

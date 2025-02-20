@@ -2,6 +2,7 @@ package cc.mrbird.febs.cos.controller;
 
 
 import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.entity.EnterpriseInfo;
 import cc.mrbird.febs.cos.entity.FinanceInfo;
 import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.IFinanceInfoService;
@@ -77,6 +78,8 @@ public class FinanceInfoController {
         StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, financeInfo.getStaffId()));
         if (staffInfo != null) {
             financeInfo.setStaffId(staffInfo.getId());
+            // 设置所属公司
+            financeInfo.setEnterpriseId(staffInfo.getEnterpriseId());
         }
         financeInfo.setStatus("0");
         financeInfo.setCreateDate(DateUtil.formatDateTime(new Date()));

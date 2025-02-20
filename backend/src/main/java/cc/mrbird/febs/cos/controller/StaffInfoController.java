@@ -2,7 +2,9 @@ package cc.mrbird.febs.cos.controller;
 
 
 import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.entity.EnterpriseInfo;
 import cc.mrbird.febs.cos.entity.StaffInfo;
+import cc.mrbird.febs.cos.service.IEnterpriseInfoService;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -23,6 +25,8 @@ import java.util.List;
 public class StaffInfoController {
 
     private final IStaffInfoService staffInfoService;
+
+    private final IEnterpriseInfoService enterpriseInfoService;
 
     /**
      * 分页获取员工信息
@@ -67,6 +71,9 @@ public class StaffInfoController {
     public R save(StaffInfo staffInfo) {
         staffInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         staffInfo.setCode("STA-" + System.currentTimeMillis());
+        // 设置所属公司
+        EnterpriseInfo enterpriseInfo = enterpriseInfoService.getOne(Wrappers.<EnterpriseInfo>lambdaQuery().eq(EnterpriseInfo::getUserId, staffInfo.getEnterpriseId()));
+        staffInfo.setEnterpriseId(enterpriseInfo.getId());
         return R.ok(staffInfoService.save(staffInfo));
     }
 
