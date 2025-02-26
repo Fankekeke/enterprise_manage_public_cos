@@ -19,7 +19,7 @@
         <img alt="example" style="width: 500px;height: 500px;" src="/static/img/Search_SVG.png"/>
       </a-col>
       <a-col :span="6" style="margin-top: 80px">
-        <p style="font-size: 30px;font-family: SimHei;font-weight: 500">欢迎使用企业订货系统</p>
+        <p style="font-size: 30px;font-family: SimHei;font-weight: 500">欢迎使用企业管理系统</p>
         <a-card :bordered="false">
           <span slot="title">
             <a-icon type="user" style="margin-right: 10px" />
