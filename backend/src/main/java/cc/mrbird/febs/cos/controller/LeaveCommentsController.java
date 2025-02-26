@@ -78,6 +78,7 @@ public class LeaveCommentsController {
         StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, leaveComments.getUserId()));
         if (staffInfo != null) {
             leaveComments.setUserId(staffInfo.getId());
+            leaveComments.setEnterpriseId(staffInfo.getEnterpriseId());
         }
         leaveComments.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(leaveCommentsService.save(leaveComments));

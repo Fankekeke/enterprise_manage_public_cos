@@ -8,14 +8,14 @@ import cc.mrbird.febs.cos.service.IConferenceInfoService;
 import cc.mrbird.febs.cos.service.INotifyInfoService;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * 会议记录 控制层
@@ -43,6 +43,25 @@ public class ConferenceInfoController {
     @GetMapping("/page")
     public R page(Page<ConferenceInfo> page, ConferenceInfo conferenceInfo) {
         return R.ok(conferenceInfoService.queryConferencePage(page, conferenceInfo));
+    }
+
+    /**
+     * 根据条件查询员工
+     *
+     * @param conditionId 会议ID
+     * @return 结果
+     */
+    @GetMapping("/queryStaffListByCondition")
+    public R queryStaffListByCondition(Integer conditionId) {
+        // 获取会议员工列表
+        ConferenceInfo conferenceInfo = conferenceInfoService.getById(conditionId);
+        if (conferenceInfo != null) {
+            // 获取员工列表
+            List<LinkedHashMap<String, Object>> staffInfoList = staffInfoService.selectStaffListByUserIds(Arrays.asList(conferenceInfo.getStaffIds().split(",")));
+            return R.ok(staffInfoList);
+        } else {
+            return R.ok(Collections.emptyList());
+        }
     }
 
     /**
@@ -84,9 +103,10 @@ public class ConferenceInfoController {
         if (CollectionUtil.isNotEmpty(staffIds)) {
             for (String staffId : staffIds) {
                 // 添加通知
-                notifyInfoService.addNotify(Integer.parseInt(staffId), "您好，“"+conferenceInfo.getTitle()+"”" + ", 会议在" + conferenceInfo.getStartTime() + "开始，请及时参与会议。");
+                notifyInfoService.addNotify(Integer.parseInt(staffId), "您好，“" + conferenceInfo.getTitle() + "”" + ", 会议在" + conferenceInfo.getStartTime() + "开始，请及时参与会议。");
             }
         }
+        conferenceInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(conferenceInfoService.save(conferenceInfo));
     }
 

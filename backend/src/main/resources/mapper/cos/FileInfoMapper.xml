@@ -10,6 +10,7 @@
        	ci.name,
        	ci.content,
        	ci.status,
+       	ci.images,
        	ci.create_by,
        	ci.create_date,
         ei.name as enterpriseName,

@@ -14,6 +14,7 @@
         ci.del_flag,
         si.code as staffCode,
         si.name as staffName,
+        si.images as staffImages,
         ei.name as enterpriseName,
         ei.images as enterpriseImages,
         di.dept_name,

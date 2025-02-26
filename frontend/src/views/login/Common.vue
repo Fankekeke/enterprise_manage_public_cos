@@ -1,5 +1,5 @@
 <template>
-  <div class="container" style="background-color: #FFFFFF">
+  <div class="container">
     <div class="content" style="margin: 0 auto">
       <div class="top">
         <div class="header">
@@ -48,7 +48,9 @@ export default {
     flex-direction: column;
     height: 100vh;
     overflow: auto;
-    background: rgb(234, 234, 234) url(../../../static/img/work-4997565_1280.png) no-repeat center ;
+    background: url(../../../static/img/work-4997565_1280.png) no-repeat center ;
+    background-color: rgb(214, 224, 252);
+    //background-color: #b6daf5;
     .content {
       padding: 32px 0;
       flex: 1;

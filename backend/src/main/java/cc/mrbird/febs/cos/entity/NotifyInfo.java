@@ -34,11 +34,13 @@ public class NotifyInfo implements Serializable {
      * 用户编号
      */
     private Integer userId;
+    private Integer staffId;
 
     /**
      * 消息内容
      */
     private String content;
+    private String status;
 
     /**
      * 删除标识

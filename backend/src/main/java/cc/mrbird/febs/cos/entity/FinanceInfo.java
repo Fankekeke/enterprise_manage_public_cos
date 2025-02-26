@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,6 +35,8 @@ public class FinanceInfo implements Serializable {
      */
     private String auditTitle;
 
+    private String totalPrice;
+
     /**
      * 申请内容
      */
@@ -63,6 +66,9 @@ public class FinanceInfo implements Serializable {
      * 审批时间
      */
     private String auditDate;
+
+    @TableField(exist = false)
+    private String staffName;
 
     /**
      * 所属企业

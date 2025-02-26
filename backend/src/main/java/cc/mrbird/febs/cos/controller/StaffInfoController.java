@@ -41,6 +41,17 @@ public class StaffInfoController {
     }
 
     /**
+     * 获取员工列表
+     *
+     * @param enterpriseId 企业ID
+     * @return 结果
+     */
+    @GetMapping("/queryStaffList")
+    public R queryStaffList(@RequestParam(value = "enterpriseId") Integer enterpriseId) {
+        return R.ok(staffInfoService.selectStaffList(enterpriseId));
+    }
+
+    /**
      * 获取员工信息
      *
      * @return 结果

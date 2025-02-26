@@ -16,12 +16,13 @@
         ci.audit_date,
         si.code as staffCode,
         si.name as staffName,
+        si.images as staffImages,
         ei.name as enterpriseName,
         ei.images as enterpriseImages,
         di.dept_name,
         poi.name as positionName
         from
-        finance_info ci
+        leave_info ci
         left join staff_info si on (si.id = ci.staff_id)
         left join enterprise_info ei on (ei.id = si.enterprise_id)
         left join dept_info di on (di.id = si.dept_id)

@@ -42,4 +42,7 @@ public class AttendanceInfo implements Serializable {
 
     @TableField(exist = false)
     private String staffName;
+
+    @TableField(exist = false)
+    private Integer enterpriseId;
 }

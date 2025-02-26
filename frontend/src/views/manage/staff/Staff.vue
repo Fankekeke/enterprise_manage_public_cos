@@ -143,6 +143,7 @@ export default {
         dataIndex: 'name'
       }, {
         title: '员工编号',
+        ellipsis: true,
         dataIndex: 'code'
       }, {
         title: '性别',
@@ -191,6 +192,7 @@ export default {
         }
       }, {
         title: '身份证号码',
+        ellipsis: true,
         dataIndex: 'idCard',
         customRender: (text, row, index) => {
           if (text !== null) {
@@ -222,6 +224,7 @@ export default {
       }, {
         title: '创建时间',
         dataIndex: 'createDate',
+        ellipsis: true,
         customRender: (text, row, index) => {
           if (text !== null) {
             return text

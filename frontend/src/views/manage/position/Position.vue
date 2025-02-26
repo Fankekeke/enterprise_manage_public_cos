@@ -145,8 +145,8 @@ export default {
         }
       }, {
         title: '备注',
-        dataIndex: 'content',
-        scopedSlots: { customRender: 'contentShow' }
+        ellipsis: true,
+        dataIndex: 'content'
       }, {
         title: '操作',
         dataIndex: 'operation',

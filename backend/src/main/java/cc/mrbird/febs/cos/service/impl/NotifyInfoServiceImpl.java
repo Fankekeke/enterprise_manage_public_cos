@@ -56,6 +56,8 @@ public class NotifyInfoServiceImpl extends ServiceImpl<NotifyInfoMapper, NotifyI
         NotifyInfo notifyInfo = new NotifyInfo();
         notifyInfo.setUserCode(staffInfo.getCode());
         notifyInfo.setUserId(staffInfo.getId());
+        notifyInfo.setStaffId(staffInfo.getId());
+        notifyInfo.setStatus("0");
         notifyInfo.setContent(content);
         notifyInfo.setDelFlag(0);
         notifyInfo.setCreateDate(DateUtil.formatDateTime(new Date()));

@@ -71,10 +71,13 @@ public class FileInfoController {
      */
     @PostMapping
     public R save(FileInfo fileInfo) {
+        fileInfo.setCode("FI-" + System.currentTimeMillis());
         fileInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         // 设置所属公司
         EnterpriseInfo enterpriseInfo = enterpriseInfoService.getOne(Wrappers.<EnterpriseInfo>lambdaQuery().eq(EnterpriseInfo::getUserId, fileInfo.getEnterpriseId()));
-        fileInfo.setEnterpriseId(enterpriseInfo.getId());
+        if (enterpriseInfo != null) {
+            fileInfo.setEnterpriseId(enterpriseInfo.getId());
+        }
         return R.ok(fileInfoService.save(fileInfo));
     }
 

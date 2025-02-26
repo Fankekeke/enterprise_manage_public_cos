@@ -50,6 +50,11 @@ public class FileInfo implements Serializable {
     private String createBy;
 
     /**
+     * 文件地址
+     */
+    private String images;
+
+    /**
      * 创建时间
      */
     private String createDate;
