@@ -5,23 +5,38 @@
     <!-- 分页获取代办任务 -->
     <select id="queryAgentPage" resultType="java.util.LinkedHashMap">
         select
-            id,
-            staff_id,
-            task_title,
-            content,
-            status,
-            create_date,
-            complate_date,
-            si.code as staffCode,
-            si.name as staffName,
-            di.dept_name,
-            poi.name as positionName
+        ai.id,
+        ai.staff_id,
+        ai.task_title,
+        ai.content,
+        ai.status,
+        ai.create_date,
+        ai.complate_date,
+        si.code as staffCode,
+        si.name as staffName,
+        ei.name as enterpriseName,
+        ei.images as enterpriseImages,
+        di.dept_name,
+        poi.name as positionName
         from
-            agent_info ai
-                left join staff_info si on (si.id = ai.staff_id)
-                left join dept_info di on (di.id = si.dept_id)
-                left join position_info poi on (poi.id = si.position_id)
+        agent_info ai
+        left join staff_info si on (si.id = ai.staff_id)
+        left join enterprise_info ei on (ei.id = si.enterprise_id)
+        left join dept_info di on (di.id = si.dept_id)
+        left join position_info poi on (poi.id = si.position_id)
         where 1 = 1
+        <if test="agentInfo.taskTitle != null and agentInfo.taskTitle != ''">
+            AND ai.task_title LIKE CONCAT('%',#{agentInfo.taskTitle},'%')
+        </if>
+        <if test="agentInfo.staffName != null and agentInfo.staffName != ''">
+            AND si.name LIKE CONCAT('%',#{agentInfo.staffName},'%')
+        </if>
+        <if test="agentInfo.staffId != null and agentInfo.staffId != ''">
+            AND si.user_id LIKE CONCAT('%',#{agentInfo.staffId},'%')
+        </if>
+        <if test="agentInfo.enterpriseId != null and agentInfo.enterpriseId != ''">
+            AND ei.user_id LIKE CONCAT('%',#{agentInfo.staffId},'%')
+        </if>
         order by ai.create_date desc
     </select>
 </mapper>

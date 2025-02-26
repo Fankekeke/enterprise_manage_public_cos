@@ -5,48 +5,43 @@
     <!-- 分页获取请假信息 -->
     <select id="selectLeavePage" resultType="java.util.LinkedHashMap">
         select
-        li.id,
-        li.student_id,
-        li.audit_title,
-        li.days,
-        li.status,
-        li.create_date,
-        li.images,
-        li.teacher_id,
-        li.audit_date,
-        si.code as studentCode,
-        si.name as studentName,
-        si.images as studentImages,
-        si.phone as studentPhone,
-        ti.name as teacherName,
-        ti.images as teacherImages,
-        ti.phone
+        ci.id,
+        ci.staff_id,
+        ci.audit_title,
+        ci.days,
+        ci.status,
+        ci.create_date,
+        ci.images,
+        ci.audit_id,
+        ci.audit_date,
+        si.code as staffCode,
+        si.name as staffName,
+        ei.name as enterpriseName,
+        ei.images as enterpriseImages,
+        di.dept_name,
+        poi.name as positionName
         from
-        leave_info li
-        left join student_info si on
-        (si.id = li.student_id)
-        left join classes_info ci on
-        (ci.id = si.classes_id)
-        left join teacher_info ti on
-        (ti.id = ci.teacher_id)
-        where
-        1 = 1
-        <if test="leaveInfo.status != null and leaveInfo.status != ''">
-            AND li.status = #{leaveInfo.status}
+        finance_info ci
+        left join staff_info si on (si.id = ci.staff_id)
+        left join enterprise_info ei on (ei.id = si.enterprise_id)
+        left join dept_info di on (di.id = si.dept_id)
+        left join position_info poi on (poi.id = si.position_id)
+        where 1 = 1
+        <if test="leaveInfo.auditTitle != null and leaveInfo.auditTitle != ''">
+            AND ci.audit_title LIKE CONCAT('%',#{leaveInfo.auditTitle},'%')
         </if>
-        <if test="leaveInfo.studentName != null and leaveInfo.studentName != ''">
-            AND si.name LIKE CONCAT('%',#{leaveInfo.studentName},'%')
+        <if test="leaveInfo.status != null">
+            AND ci.status = #{leaveInfo.status}
         </if>
-        <if test="leaveInfo.teacherName != null and leaveInfo.teacherName != ''">
-            AND ti.name LIKE CONCAT('%',#{leaveInfo.teacherName},'%')
+        <if test="leaveInfo.staffName != null and leaveInfo.staffName != ''">
+            AND si.name LIKE CONCAT('%',#{leaveInfo.staffName},'%')
         </if>
-        <if test="leaveInfo.teacherId != null and leaveInfo.teacherId != ''">
-            AND ti.user_id = #{leaveInfo.teacherId}
+        <if test="leaveInfo.staffId != null and leaveInfo.staffId != ''">
+            AND si.user_id LIKE CONCAT('%',#{leaveInfo.staffId},'%')
         </if>
-        <if test="leaveInfo.studentId != null and leaveInfo.studentId != ''">
-            AND si.user_id = #{leaveInfo.studentId}
+        <if test="leaveInfo.enterpriseId != null and leaveInfo.enterpriseId != ''">
+            AND ei.user_id LIKE CONCAT('%',#{leaveInfo.staffId},'%')
         </if>
-        order by
-        li.create_date desc
+        order by ci.create_date desc
     </select>
 </mapper>

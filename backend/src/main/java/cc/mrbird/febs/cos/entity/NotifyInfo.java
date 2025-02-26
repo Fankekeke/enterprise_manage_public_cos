@@ -45,12 +45,18 @@ public class NotifyInfo implements Serializable {
      */
     private Integer delFlag;
 
+
+    private Integer enterpriseId;
+
     /**
      * 创建时间
      */
     private String createDate;
 
     private String name;
+
+    @TableField(exist = false)
+    private String staffName;
 
     @TableField(exist = false)
     private String userName;

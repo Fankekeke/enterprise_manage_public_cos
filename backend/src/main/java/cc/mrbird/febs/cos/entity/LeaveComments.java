@@ -45,6 +45,8 @@ public class LeaveComments implements Serializable {
      */
     private String status;
 
+    private Integer enterpriseId;
+
     /**
      * 创建时间
      */
@@ -54,6 +56,9 @@ public class LeaveComments implements Serializable {
      * 删除标识
      */
     private String delFlag;
+
+    @TableField(exist = false)
+    private String staffName;
 
     @TableField(exist = false)
     private String userName;

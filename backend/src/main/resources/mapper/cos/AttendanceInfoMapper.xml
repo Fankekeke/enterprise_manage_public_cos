@@ -4,6 +4,33 @@
 
     <!-- 分页获取考勤打卡 -->
     <select id="queryAttendancePage" resultType="java.util.LinkedHashMap">
-
+        select
+        ai.id,
+        ai.staff_id,
+        ai.put_take_date,
+        ai.out_take_date,
+        si.code as staffCode,
+        si.name as staffName,
+        ei.name as enterpriseName,
+        ei.images as enterpriseImages,
+        di.dept_name,
+        poi.name as positionName
+        from
+        attendance_info ai
+        left join staff_info si on (si.id = ai.staff_id)
+        left join enterprise_info ei on (ei.id = si.enterprise_id)
+        left join dept_info di on (di.id = si.dept_id)
+        left join position_info poi on (poi.id = si.position_id)
+        where 1 = 1
+        <if test="attendanceInfo.staffName != null and attendanceInfo.staffName != ''">
+            AND si.name LIKE CONCAT('%',#{attendanceInfo.staffName},'%')
+        </if>
+        <if test="attendanceInfo.staffId != null and attendanceInfo.staffId != ''">
+            AND si.user_id LIKE CONCAT('%',#{attendanceInfo.staffId},'%')
+        </if>
+        <if test="attendanceInfo.enterpriseId != null and attendanceInfo.enterpriseId != ''">
+            AND ei.user_id LIKE CONCAT('%',#{attendanceInfo.staffId},'%')
+        </if>
+        order by ai.put_take_date desc
     </select>
 </mapper>

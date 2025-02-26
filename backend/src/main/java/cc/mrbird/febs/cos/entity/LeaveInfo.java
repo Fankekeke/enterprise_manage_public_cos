@@ -74,6 +74,9 @@ public class LeaveInfo implements Serializable {
     private String auditDate;
 
     @TableField(exist = false)
+    private String staffName;
+
+    @TableField(exist = false)
     private String studentName;
 
     @TableField(exist = false)

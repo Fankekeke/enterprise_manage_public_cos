@@ -16,8 +16,8 @@
         ui2.images AS takeUserAvatar
         FROM
         message_info mi
-        LEFT JOIN user_info ui1 ON ( ui1.id = mi.send_user )
-        LEFT JOIN user_info ui2 ON ( ui2.id = mi.take_user )
+        LEFT JOIN staff_info ui1 ON ( ui1.id = mi.send_user )
+        LEFT JOIN staff_info ui2 ON ( ui2.id = mi.take_user )
         WHERE
         1 = 1
         <if test="messageInfo.sendUserName != null and messageInfo.sendUserName != ''">
@@ -52,8 +52,8 @@
                                                      IF
                                                          (send_user &lt; take_user, send_user, take_user)))
               ORDER BY create_date DESC) mi
-                 LEFT JOIN user_info ui1 ON (ui1.id = mi.send_user)
-                 LEFT JOIN user_info ui2 ON (ui2.id = mi.take_user)
+                 LEFT JOIN staff_info ui1 ON (ui1.id = mi.send_user)
+                 LEFT JOIN staff_info ui2 ON (ui2.id = mi.take_user)
         ORDER BY mi.create_date DESC
     </select>
 
@@ -77,8 +77,8 @@
               FROM message_info
               WHERE send_user = #{ takeUser }
                 AND take_user = #{ sendUser }) mi
-                 LEFT JOIN user_info ui1 ON (ui1.id = mi.send_user)
-                 LEFT JOIN user_info ui2 ON (
+                 LEFT JOIN staff_info ui1 ON (ui1.id = mi.send_user)
+                 LEFT JOIN staff_info ui2 ON (
             ui2.id = mi.take_user
             )
         ORDER BY mi.create_date ASC

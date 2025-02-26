@@ -6,18 +6,24 @@
     <select id="queryNotifyPage" resultType="java.util.LinkedHashMap">
         select
         ni.id,
+        ni.user_id,
         ni.user_code,
         ni.content,
         ni.del_flag,
         ni.create_date,
         ni.name,
-        ui.name as userName,
-        ui.phone as userPhone,
-        ui.images as userImages
+        si.code as staffCode,
+        si.name as staffName,
+        ei.name as enterpriseName,
+        ei.images as enterpriseImages,
+        di.dept_name,
+        poi.name as positionName
         from
         notify_info ni
-        left join user_info ui on
-        (ui.code = ni.user_code)
+        left join staff_info si on (si.id = ci.staff_id)
+        left join enterprise_info ei on (ei.id = si.enterprise_id)
+        left join dept_info di on (di.id = si.dept_id)
+        left join position_info poi on (poi.id = si.position_id)
         where
         1 = 1
         <if test="notifyInfo.userName != null and notifyInfo.userName != ''">
@@ -25,6 +31,15 @@
         </if>
         <if test="notifyInfo.content != null and notifyInfo.content != ''">
             AND ni.content LIKE CONCAT('%',#{notifyInfo.content},'%')
+        </if>
+        <if test="notifyInfo.staffName != null and notifyInfo.staffName != ''">
+            AND si.name LIKE CONCAT('%',#{notifyInfo.staffName},'%')
+        </if>
+        <if test="notifyInfo.staffId != null and notifyInfo.staffId != ''">
+            AND si.user_id LIKE CONCAT('%',#{notifyInfo.staffId},'%')
+        </if>
+        <if test="notifyInfo.enterpriseId != null and notifyInfo.enterpriseId != ''">
+            AND ei.user_id LIKE CONCAT('%',#{notifyInfo.staffId},'%')
         </if>
         order by
         ni.create_date desc

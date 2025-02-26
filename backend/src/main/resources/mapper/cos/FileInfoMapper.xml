@@ -4,6 +4,29 @@
 
     <!-- 分页获取共享文件 -->
     <select id="queryFilePage" resultType="java.util.LinkedHashMap">
-
+        select
+        ci.id,
+       	ci.code,
+       	ci.name,
+       	ci.content,
+       	ci.status,
+       	ci.create_by,
+       	ci.create_date,
+        ei.name as enterpriseName,
+        ei.images as enterpriseImages
+        from
+        file_info ci
+        left join enterprise_info ei on (ei.id = ci.enterprise_id)
+        where 1 = 1
+        <if test="fileInfo.name != null and fileInfo.name != ''">
+            AND ci.name LIKE CONCAT('%',#{fileInfo.name},'%')
+        </if>
+        <if test="fileInfo.status != null">
+            AND ci.status = #{fileInfo.status}
+        </if>
+        <if test="fileInfo.enterpriseId != null and fileInfo.enterpriseId != ''">
+            AND ei.user_id LIKE CONCAT('%',#{fileInfo.staffId},'%')
+        </if>
+        order by ci.create_date desc
     </select>
 </mapper>
