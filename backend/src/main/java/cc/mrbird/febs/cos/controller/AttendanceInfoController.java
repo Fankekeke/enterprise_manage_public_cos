@@ -5,6 +5,7 @@ import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.AttendanceInfo;
 import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.IAttendanceInfoService;
+import cc.mrbird.febs.cos.service.INotifyInfoService;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +32,8 @@ public class AttendanceInfoController {
 
     private final IStaffInfoService staffInfoService;
 
+    private final INotifyInfoService notifyInfoService;
+
     /**
      * 分页获取考勤打卡
      *
@@ -40,6 +44,16 @@ public class AttendanceInfoController {
     @GetMapping("/page")
     public R page(Page<AttendanceInfo> page, AttendanceInfo attendanceInfo) {
         return R.ok(attendanceInfoService.queryAttendancePage(page, attendanceInfo));
+    }
+
+    /**
+     * 查询当天打卡状态
+     * @param userId 员工ID
+     * @return 结果
+     */
+    @GetMapping("/queryTodayCheck")
+    public R queryTodayCheck(Integer userId) {
+        return R.ok(attendanceInfoService.queryTodayCheck(userId, DateUtil.formatDate(new Date())));
     }
 
     /**
@@ -82,6 +96,12 @@ public class AttendanceInfoController {
      */
     @PostMapping
     public R save(AttendanceInfo attendanceInfo) {
+        // 获取员工信息
+        StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, attendanceInfo.getStaffId()));
+        if (staffInfo != null) {
+            attendanceInfo.setStaffId(staffInfo.getId());
+        }
+        attendanceInfo.setPutTakeDate(DateUtil.formatDateTime(new Date()));
         return R.ok(attendanceInfoService.checkWork(attendanceInfo));
     }
 
@@ -97,6 +117,23 @@ public class AttendanceInfoController {
     }
 
     /**
+     * 根据用户获取打卡记录
+     *
+     * @param userId 用户id
+     * @return 结果
+     */
+    @GetMapping("/queryAttendanceRecordByUserId")
+    public R queryAttendanceRecordByUserId(Integer userId) {
+        // 获取员工信息
+        StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, userId));
+        if (staffInfo != null) {
+            return R.ok(attendanceInfoService.list(Wrappers.<AttendanceInfo>lambdaQuery().eq(AttendanceInfo::getStaffId, staffInfo.getId())));
+        } else {
+            return R.ok(Collections.emptyList());
+        }
+    }
+
+    /**
      * 修改考勤打卡
      *
      * @param attendanceInfo 考勤打卡
@@ -104,6 +141,9 @@ public class AttendanceInfoController {
      */
     @PutMapping
     public R edit(AttendanceInfo attendanceInfo) {
+        attendanceInfo.setOutTakeDate(DateUtil.formatDateTime(new Date()));
+        // 添加通知
+        notifyInfoService.addNotify(attendanceInfo.getStaffId(), "辛苦了，下班上班成功！");
         return R.ok(attendanceInfoService.updateById(attendanceInfo));
     }
 

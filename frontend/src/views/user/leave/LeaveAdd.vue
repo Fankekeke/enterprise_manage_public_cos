@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="show" title="新增请假申请" @cancel="onClose" :width="800">
+  <a-modal v-model="show" title="新增请假申请" @cancel="onClose" :width="600">
     <template slot="footer">
       <a-button key="back" @click="onClose">
         取消
@@ -10,7 +10,7 @@
     </template>
     <a-form :form="form" layout="vertical">
       <a-row :gutter="20">
-        <a-col :span="12">
+        <a-col :span="24">
           <a-form-item label='请假天数' v-bind="formItemLayout">
             <a-input-number :min="1" v-decorator="[
               'days',
@@ -19,9 +19,17 @@
           </a-form-item>
         </a-col>
         <a-col :span="24">
+          <a-form-item label='申请标题' v-bind="formItemLayout">
+            <a-input v-decorator="[
+            'auditTitle',
+            { rules: [{ required: true, message: '请输入申请标题!' }] }
+            ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
           <a-form-item label='请假内容' v-bind="formItemLayout">
             <a-textarea :rows="6" v-decorator="[
-            'auditTitle',
+            'content',
              { rules: [{ required: true, message: '请输入请假内容!' }] }
             ]"/>
           </a-form-item>

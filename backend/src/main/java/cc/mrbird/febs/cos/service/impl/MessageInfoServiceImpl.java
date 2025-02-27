@@ -55,13 +55,13 @@ public class MessageInfoServiceImpl extends ServiceImpl<MessageInfoMapper, Messa
     /**
      * 根据用户编号获取联系人
      *
-     * @param userCode 用户编号
+     * @param userId 用户编号
      * @param flag
      * @return 结果
      */
     @Override
-    public List<LinkedHashMap<String, Object>> selectContactPerson(String userCode, Integer flag) {
-        return baseMapper.selectContactPerson(userCode, flag);
+    public List<LinkedHashMap<String, Object>> selectContactPerson(Integer userId, Integer flag) {
+        return baseMapper.selectContactPerson(userId, flag);
     }
 
     /**

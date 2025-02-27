@@ -26,6 +26,13 @@ public interface IAttendanceInfoService extends IService<AttendanceInfo> {
     IPage<LinkedHashMap<String, Object>> queryAttendancePage(Page<AttendanceInfo> page, AttendanceInfo attendanceInfo);
 
     /**
+     * 校验今日是否已经打卡
+     * @param userId 用户ID
+     * @return 结果
+     */
+    AttendanceInfo queryTodayCheck(Integer userId, String createDate);
+
+    /**
      * 根据员工ID查询考勤打卡
      *
      * @param staffId 员工ID

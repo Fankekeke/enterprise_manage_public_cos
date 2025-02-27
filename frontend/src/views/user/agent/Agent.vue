@@ -65,7 +65,7 @@
           </template>
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改"></a-icon>
+<!--          <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改"></a-icon>-->
           <a-icon v-if="record.status == 0" type="rollback" @click="agentFinish(record)" title="完 成" style="margin-left: 15px"></a-icon>
         </template>
       </a-table>

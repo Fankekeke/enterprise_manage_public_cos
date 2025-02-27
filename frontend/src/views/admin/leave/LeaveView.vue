@@ -1,7 +1,13 @@
 <template>
   <a-modal v-model="show" title="员工请假详情" @cancel="onClose" :width="800">
     <template slot="footer">
-      <a-button key="back" @click="onClose" type="danger">
+      <a-button v-if="memberData.status == 0" key="back" @click="submit(1)" type="primary">
+        通过
+      </a-button>
+      <a-button v-if="memberData.status == 0" key="back" @click="submit(2)" type="danger">
+        驳回
+      </a-button>
+      <a-button v-if="memberData.status != 0" key="back" @click="onClose" type="danger">
         关闭
       </a-button>
     </template>
@@ -35,9 +41,14 @@
       <br/>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
-        <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">请加内容</span></a-col>
+        <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">请假内容</span></a-col>
         <a-col :span="24">
           {{ memberData.auditTitle ? memberData.auditTitle : '- -' }}
+        </a-col>
+        <br/>
+        <br/>
+        <a-col :span="24">
+          {{ memberData.content ? memberData.content : '- -' }}
         </a-col>
       </a-row>
       <br/>
@@ -148,6 +159,11 @@ export default {
     },
     picHandleChange ({ fileList }) {
       this.fileList = fileList
+    },
+    submit (status) {
+      this.$get(`/cos/leave-info/setStatusByLeave`, {id: this.memberData.id, status}).then((r) => {
+        this.$emit('success')
+      })
     },
     onClose () {
       this.$emit('close')

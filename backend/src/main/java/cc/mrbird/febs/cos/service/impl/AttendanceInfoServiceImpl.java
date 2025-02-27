@@ -47,6 +47,16 @@ public class AttendanceInfoServiceImpl extends ServiceImpl<AttendanceInfoMapper,
     }
 
     /**
+     * 校验今日是否已经打卡
+     * @param userId 用户ID
+     * @return 结果
+     */
+    @Override
+    public AttendanceInfo queryTodayCheck(Integer userId, String createDate) {
+        return baseMapper.queryTodayCheck(userId, createDate);
+    }
+
+    /**
      * 根据员工ID查询考勤打卡
      *
      * @param staffId 员工ID
@@ -88,12 +98,12 @@ public class AttendanceInfoServiceImpl extends ServiceImpl<AttendanceInfoMapper,
         // 校验本日是否打卡
         AttendanceInfo todayCheck = this.checkWorkByToday(attendanceInfo.getStaffId());
         if (todayCheck == null) {
-            attendanceInfo.setPutTakeDate(DateUtil.formatDate(new Date()));
+            attendanceInfo.setPutTakeDate(DateUtil.formatDateTime(new Date()));
             // 添加通知
             notifyInfoService.addNotify(attendanceInfo.getStaffId(), "您好，打卡上班成功！");
             return this.save(attendanceInfo);
         } else {
-            attendanceInfo.setOutTakeDate(DateUtil.formatDate(new Date()));
+            attendanceInfo.setOutTakeDate(DateUtil.formatDateTime(new Date()));
             // 添加通知
             notifyInfoService.addNotify(attendanceInfo.getStaffId(), "辛苦了，下班上班成功！");
             return this.updateById(attendanceInfo);

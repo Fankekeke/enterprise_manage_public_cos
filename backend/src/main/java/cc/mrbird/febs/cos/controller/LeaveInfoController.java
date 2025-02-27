@@ -44,6 +44,23 @@ public class LeaveInfoController {
     }
 
     /**
+     * 设置请假状态
+     *
+     * @param id     主键
+     * @param status 状态
+     * @return 结果
+     */
+    @GetMapping("/setStatusByLeave")
+    public R setStatusByLeave(Integer id, String status) {
+        LeaveInfo leaveInfo = leaveInfoService.getById(id);
+        leaveInfo.setAuditDate(DateUtil.formatDateTime(new Date()));
+        leaveInfo.setStatus(status);
+        // 添加通知
+        notifyInfoService.addNotify(leaveInfo.getStaffId(), "您好，您的请假已" + ("1".equals(status) ? "通过" : "驳回") + "，请查看！");
+        return R.ok(leaveInfoService.updateById(leaveInfo));
+    }
+
+    /**
      * 请假审批
      *
      * @param id     主键

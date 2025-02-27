@@ -26,14 +26,13 @@
             <span>用户信息</span>
           </span>
           <div>
-            <a-avatar :src="'http://127.0.0.1:9527/imagesWeb/' + userInfo.images" shape="square" style="width: 100px;height: 100px;float: left;margin: 10px 0 10px 10px" />
+            <a-avatar :src="'http://127.0.0.1:9527/imagesWeb/' + userInfo.images.split(',')[0]" shape="square" style="width: 100px;height: 100px;float: left;margin: 10px 0 10px 10px" />
             <div style="float: left;margin-left: 15px;margin-top: 8px">
               <span style="font-size: 20px;font-family: SimHei">{{ userInfo.name }}</span>
-              <span style="font-size: 14px;font-family: SimHei">{{ userInfo.code }}</span>
             </div>
             <br/>
             <div style="float: left;margin-left: 15px;margin-top: 8px">
-              <span style="font-size: 14px;font-family: SimHei">邮箱：{{ userInfo.email == null ? '- -' : userInfo.email }}</span>
+              <span style="font-size: 14px;font-family: SimHei">邮箱：{{ userInfo.mail == null ? '- -' : userInfo.mail }}</span>
             </div>
             <div style="float: left;margin-left: 15px;margin-top: 8px">
               <span style="font-size: 14px;font-family: SimHei">电话：{{ userInfo.phone == null ? '- -' : userInfo.phone }}</span>
@@ -94,7 +93,7 @@ export default {
       this.visible = false
     },
     selectBulletinDetail () {
-      this.$get(`/cos/user-info/selectBulletinDetail/${this.currentUser.userId}`).then((r) => {
+      this.$get(`/cos/staff-info/selectBulletinDetail/${this.currentUser.userId}`).then((r) => {
         this.userInfo = r.data.user
         this.newsList = r.data.bulletin
         if (this.newsList.length !== 0) {

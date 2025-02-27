@@ -1,7 +1,13 @@
 <template>
   <a-modal v-model="show" title="员工财务详情" @cancel="onClose" :width="800">
     <template slot="footer">
-      <a-button key="back" @click="onClose" type="danger">
+      <a-button v-if="memberData.status == 0" key="back" @click="submit(1)" type="primary">
+        通过
+      </a-button>
+      <a-button v-if="memberData.status == 0" key="back" @click="submit(2)" type="danger">
+        驳回
+      </a-button>
+      <a-button v-if="memberData.status != 0" key="back" @click="onClose" type="danger">
         关闭
       </a-button>
     </template>
@@ -153,6 +159,11 @@ export default {
     },
     picHandleChange ({ fileList }) {
       this.fileList = fileList
+    },
+    submit (status) {
+      this.$get(`/cos/finance-info/setStatusByFinance`, {id: this.memberData.id, status}).then((r) => {
+        this.$emit('success')
+      })
     },
     onClose () {
       this.$emit('close')

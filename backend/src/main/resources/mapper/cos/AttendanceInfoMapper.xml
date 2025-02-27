@@ -34,4 +34,17 @@
         </if>
         order by ai.put_take_date desc
     </select>
+
+    <!-- 校验今日是否已经打卡 -->
+    <select id="queryTodayCheck" resultType="cc.mrbird.febs.cos.entity.AttendanceInfo">
+        select * from attendance_info ai
+        left join staff_info ui on
+        (ui.id = ai.staff_id)
+        where
+        1 = 1
+        <if test="userId != null and userId != ''">
+            AND ui.user_id = #{userId}
+        </if>
+        AND date_format(ai.put_take_date, '%Y-%m-%d') = date_format(#{createDate}, '%Y-%m-%d')
+    </select>
 </mapper>

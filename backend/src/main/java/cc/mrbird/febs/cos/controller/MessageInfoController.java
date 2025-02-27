@@ -72,16 +72,16 @@ public class MessageInfoController {
      * @return 结果
      */
     @GetMapping("/getMessageDetail")
-    public R getMessageDetail(@RequestParam(value = "takeUser") Integer takeUser, @RequestParam(value = "sendUser") Integer sendUser, @RequestParam(value = "userId") Integer userId) {
-        StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, userId));
-        if (takeUser.equals(staffInfo.getUserId())) {
-            messageInfoService.update(Wrappers.<MessageInfo>lambdaUpdate().set(MessageInfo::getTaskStatus, 1)
-                    .eq(MessageInfo::getTakeUser, takeUser).eq(MessageInfo::getSendUser, sendUser));
-        } else {
-            messageInfoService.update(Wrappers.<MessageInfo>lambdaUpdate().set(MessageInfo::getTaskStatus, 1)
-                    .eq(MessageInfo::getTakeUser, sendUser).eq(MessageInfo::getSendUser, takeUser));
-        }
-        return R.ok(messageInfoService.getMessageDetail(takeUser, sendUser));
+    public R getMessageDetail(@RequestParam(value = "takeUser") Integer takeUser, @RequestParam(value = "sendUser") Integer sendUser) {
+        StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, takeUser));
+//        if (takeUser.equals(staffInfo.getUserId())) {
+//            messageInfoService.update(Wrappers.<MessageInfo>lambdaUpdate().set(MessageInfo::getTaskStatus, 1)
+//                    .eq(MessageInfo::getTakeUser, takeUser).eq(MessageInfo::getSendUser, sendUser));
+//        } else {
+//            messageInfoService.update(Wrappers.<MessageInfo>lambdaUpdate().set(MessageInfo::getTaskStatus, 1)
+//                    .eq(MessageInfo::getTakeUser, sendUser).eq(MessageInfo::getSendUser, takeUser));
+//        }
+        return R.ok(messageInfoService.getMessageDetail(staffInfo.getId(), sendUser));
     }
 
     /**
@@ -99,12 +99,13 @@ public class MessageInfoController {
     /**
      * 根据用户编号获取联系人
      *
-     * @param userCode 用户编号
+     * @param userId 用户编号
      * @return 结果
      */
     @GetMapping("/contact/person")
-    public R selectContactPerson(@RequestParam("userCode") String userCode, @RequestParam("flag") Integer flag) {
-        return R.ok(messageInfoService.selectContactPerson(userCode, flag));
+    public R selectContactPerson(@RequestParam("userId") Integer userId, @RequestParam("flag") Integer flag) {
+        StaffInfo staffInfo =  staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, userId));
+        return R.ok(messageInfoService.selectContactPerson(staffInfo.getId(), flag));
     }
 
     /**
@@ -125,6 +126,12 @@ public class MessageInfoController {
      */
     @PostMapping
     public R save(MessageInfo messageInfo) {
+        messageInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        messageInfo.setTaskStatus(0);
+        StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, messageInfo.getSendUser()));
+        if (staffInfo != null) {
+            messageInfo.setSendUser(staffInfo.getId());
+        }
         return R.ok(messageInfoService.save(messageInfo));
     }
 

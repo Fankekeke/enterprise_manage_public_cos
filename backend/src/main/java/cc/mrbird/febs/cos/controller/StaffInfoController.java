@@ -41,6 +41,17 @@ public class StaffInfoController {
     }
 
     /**
+     * 查询用户信息详情【公告信息】
+     *
+     * @param id 主键ID
+     * @return 结果
+     */
+    @GetMapping("/selectBulletinDetail/{id}")
+    public R selectBulletinDetail(@PathVariable("id") Integer id) {
+        return R.ok(staffInfoService.selectBulletinDetail(id));
+    }
+
+    /**
      * 获取员工列表
      *
      * @param enterpriseId 企业ID
@@ -49,6 +60,28 @@ public class StaffInfoController {
     @GetMapping("/queryStaffList")
     public R queryStaffList(@RequestParam(value = "enterpriseId") Integer enterpriseId) {
         return R.ok(staffInfoService.selectStaffList(enterpriseId));
+    }
+
+    /**
+     * 获取员工列表
+     *
+     * @param staffId 企业ID
+     * @return 结果
+     */
+    @GetMapping("/queryStaffList/staff")
+    public R queryStaffListByStaff(@RequestParam(value = "staffId") Integer staffId) {
+        StaffInfo staffInfo = staffInfoService.getOne(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getUserId, staffId));
+        return R.ok(staffInfoService.queryStaffListByStaff(staffInfo.getEnterpriseId(), staffInfo.getId()));
+    }
+
+    /**
+     * 获取员工信息
+     *
+     * @return 结果
+     */
+    @GetMapping("/userInfo/detail/{userId}")
+    public R queryStaffByUserId(@PathVariable("userId") Integer userId) {
+        return R.ok(staffInfoService.queryStaffByUserId(userId));
     }
 
     /**

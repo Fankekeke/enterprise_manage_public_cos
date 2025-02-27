@@ -66,7 +66,9 @@
                mi.create_date AS createDate,
                ui1.name  AS sendUserName,
                ui1.images     AS sendUserAvatar,
+               ui1.user_id AS sendUserId,
                ui2.name  AS takeUserName,
+               ui2.user_id  AS takeUserId,
                ui2.images     AS takeUserAvatar
         FROM (SELECT *
               FROM message_info
@@ -88,9 +90,9 @@
     <select id="selectContactPerson" resultType="java.util.LinkedHashMap">
         select
         ci.id,
-        ci.expert_code,
-        ci.enterprise_code,
-        ci.`type`,
+        ci.send_user,
+        ci.take_user,
+        ci.`task_status`,
         ci.content,
         ci.create_date,
         <if test="flag != null and flag == 1">
@@ -99,32 +101,31 @@
         </if>
         <if test="flag != null and flag == 2">
             ei.name,
-            ei.images,
-            ei.`position`
+            ei.images
         </if>
         from
-        chat_info ci
+        message_info ci
         <if test="flag != null and flag == 2">
-            left join expert_info ei on
-            (ei.code = ci.expert_code)
+            left join staff_info ei on
+            (ei.id = ci.send_user)
         </if>
         <if test="flag != null and flag == 1">
-            left join enterprise_info ei2 on
-            (ei2.code = ci.enterprise_code)
+            left join staff_info ei2 on
+            (ei2.id = ci.take_user)
         </if>
         where
         1 = 1
         <if test="flag != null and flag == 2">
-            and ci.enterprise_code = #{userCode}
+            and ci.take_user = #{userId}
         </if>
         <if test="flag != null and flag == 1">
-            and ci.expert_code = #{userCode}
+            and ci.send_user = #{userId}
         </if>
         <if test="flag != null and flag == 2">
-            group by ci.expert_code
+            group by ci.send_user
         </if>
         <if test="flag != null and flag == 1">
-            group by ci.enterprise_code
+            group by ci.take_user
         </if>
         order by
         create_date desc
@@ -133,9 +134,9 @@
     <!-- 查询聊天记录 -->
     <select id="selectChatList" resultType="java.util.LinkedHashMap">
         select mi.id,
-               mi.expert_code,
-               mi.enterprise_code,
-               mi.`type`,
+               mi.send_user,
+               mi.take_user,
+               mi.`task_status`,
                mi.content,
                mi.create_date,
                ei.name    as expertName,
@@ -143,14 +144,14 @@
                ei2.name   as enterpriseName,
                ei2.images as enterpriseImages
         from (select *
-              from chat_info
-              where expert_code =
+              from message_info
+              where send_user =
                     #{ expertCode }
-                AND enterprise_code = #{ enterpriseCode }) mi
-                 left join expert_info ei on
-            (ei.code = mi.expert_code)
-                 left join enterprise_info ei2 on
-            (ei2.code = mi.enterprise_code)
+                AND take_user = #{ enterpriseCode }) mi
+                 left join staff_info ei on
+            (ei.id = mi.send_user)
+                 left join staff_info ei2 on
+            (ei2.id = mi.take_user)
         ORDER BY mi.create_date asc
     </select>
 </mapper>

@@ -31,6 +31,15 @@ public interface StaffInfoMapper extends BaseMapper<StaffInfo> {
      */
     List<LinkedHashMap<String, Object>> selectStaffList(@Param("enterpriseId") Integer enterpriseId);
 
+
+    /**
+     * 查询员工信息
+     *
+     * @param enterpriseId 企业id
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> selectStaffListUser(@Param("enterpriseId") Integer enterpriseId, @Param("staffId") Integer staffId);
+
     /**
      * 查询员工信息
      *

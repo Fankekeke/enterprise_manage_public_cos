@@ -4,6 +4,7 @@ package cc.mrbird.febs.cos.controller;
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.EnterpriseInfo;
 import cc.mrbird.febs.cos.entity.FinanceInfo;
+import cc.mrbird.febs.cos.entity.LeaveInfo;
 import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.IFinanceInfoService;
 import cc.mrbird.febs.cos.service.INotifyInfoService;
@@ -44,6 +45,23 @@ public class FinanceInfoController {
     @GetMapping("/page")
     public R page(Page<FinanceInfo> page, FinanceInfo financeInfo) {
         return R.ok(financeInfoService.queryFinancePage(page, financeInfo));
+    }
+
+    /**
+     * 审核财务申请
+     *
+     * @param id     主键ID
+     * @param status 状态
+     * @return 结果
+     */
+    @GetMapping("/setStatusByFinance")
+    public R setStatusByFinance(Integer id, String status) {
+        FinanceInfo leaveInfo = financeInfoService.getById(id);
+        leaveInfo.setAuditDate(DateUtil.formatDateTime(new Date()));
+        leaveInfo.setStatus(status);
+        // 添加通知
+        notifyInfoService.addNotify(leaveInfo.getStaffId(), "您好，您的财务申请【" + leaveInfo.getTotalPrice() + "】已" + ("1".equals(status) ? "通过" : "驳回") + "，请等待打卡！");
+        return R.ok(financeInfoService.updateById(leaveInfo));
     }
 
     /**

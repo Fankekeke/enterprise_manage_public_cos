@@ -65,6 +65,7 @@
     </div>
     <member-view
       @close="handlememberViewClose"
+      @success="handlememberViewSuccess"
       :memberShow="memberView.visiable"
       :memberData="memberView.data">
     </member-view>
@@ -167,9 +168,9 @@ export default {
             case '0':
               return <a-tag>未审批</a-tag>
             case '1':
-              return <a-tag>通过</a-tag>
+              return <a-tag color="green">通过</a-tag>
             case '2':
-              return <a-tag>驳回</a-tag>
+              return <a-tag color="red">驳回</a-tag>
             default:
               return '- -'
           }
@@ -241,6 +242,11 @@ export default {
     },
     handlememberViewClose () {
       this.memberView.visiable = false
+    },
+    handlememberViewSuccess () {
+      this.memberView.visiable = false
+      this.$message.success('请假审批成功')
+      this.search()
     },
     handlememberEditClose () {
       this.memberEdit.visiable = false

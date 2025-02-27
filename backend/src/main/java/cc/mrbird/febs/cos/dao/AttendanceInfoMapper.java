@@ -23,4 +23,11 @@ public interface AttendanceInfoMapper extends BaseMapper<AttendanceInfo> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> queryAttendancePage(Page<AttendanceInfo> page, @Param("attendanceInfo") AttendanceInfo attendanceInfo);
+
+    /**
+     * 校验今日是否已经打卡
+     * @param userId 用户ID
+     * @return 结果
+     */
+    AttendanceInfo queryTodayCheck(@Param("userId") Integer userId, @Param("createDate") String createDate);
 }

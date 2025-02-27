@@ -24,12 +24,36 @@ public interface IStaffInfoService extends IService<StaffInfo> {
     IPage<LinkedHashMap<String, Object>> selectStaffPage(Page<StaffInfo> page, StaffInfo staffInfo);
 
     /**
+     * 查询用户信息详情【公告信息】
+     *
+     * @param userId 主键ID
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> selectBulletinDetail(Integer userId);
+
+    /**
      * 查询员工信息
      *
      * @param enterpriseId 企业id
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> selectStaffList(Integer enterpriseId);
+
+    /**
+     * 获取员工列表
+     *
+     * @param enterpriseId 企业ID
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> queryStaffListByStaff(Integer enterpriseId, Integer userId);
+
+    /**
+     * 根据用户id查询员工信息
+     *
+     * @param userId 用户id
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> queryStaffByUserId(Integer userId);
 
     /**
      * 查询员工信息

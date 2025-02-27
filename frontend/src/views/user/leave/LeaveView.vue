@@ -38,6 +38,11 @@
         <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">请加内容</span></a-col>
         <a-col :span="24">
           {{ memberData.auditTitle ? memberData.auditTitle : '- -' }}
+          <br/>
+          <br/>
+          <a-col :span="24">
+            {{ memberData.content ? memberData.content : '- -' }}
+          </a-col>
         </a-col>
       </a-row>
       <br/>

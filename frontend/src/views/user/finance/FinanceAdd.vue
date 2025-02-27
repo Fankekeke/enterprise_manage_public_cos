@@ -19,9 +19,17 @@
           </a-form-item>
         </a-col>
         <a-col :span="24">
+          <a-form-item label='申请标题' v-bind="formItemLayout">
+            <a-input v-decorator="[
+            'auditTitle',
+            { rules: [{ required: true, message: '请输入申请标题!' }] }
+            ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
           <a-form-item label='申请内容' v-bind="formItemLayout">
             <a-textarea :rows="6" v-decorator="[
-            'auditTitle',
+            'content',
              { rules: [{ required: true, message: '请输入申请内容!' }] }
             ]"/>
           </a-form-item>
