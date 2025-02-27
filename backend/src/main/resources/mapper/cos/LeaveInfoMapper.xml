@@ -38,10 +38,10 @@
             AND si.name LIKE CONCAT('%',#{leaveInfo.staffName},'%')
         </if>
         <if test="leaveInfo.staffId != null and leaveInfo.staffId != ''">
-            AND si.user_id LIKE CONCAT('%',#{leaveInfo.staffId},'%')
+            AND si.user_id = #{leaveInfo.staffId}
         </if>
         <if test="leaveInfo.enterpriseId != null and leaveInfo.enterpriseId != ''">
-            AND ei.user_id LIKE CONCAT('%',#{leaveInfo.staffId},'%')
+            AND ei.user_id = #{leaveInfo.enterpriseId}
         </if>
         order by ci.create_date desc
     </select>

@@ -26,7 +26,7 @@
             AND ci.status = #{fileInfo.status}
         </if>
         <if test="fileInfo.enterpriseId != null and fileInfo.enterpriseId != ''">
-            AND ei.user_id LIKE CONCAT('%',#{fileInfo.staffId},'%')
+            AND ei.user_id = #{fileInfo.enterpriseId}
         </if>
         order by ci.create_date desc
     </select>

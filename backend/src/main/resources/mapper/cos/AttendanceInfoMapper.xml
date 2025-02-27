@@ -27,10 +27,10 @@
             AND si.name LIKE CONCAT('%',#{attendanceInfo.staffName},'%')
         </if>
         <if test="attendanceInfo.staffId != null and attendanceInfo.staffId != ''">
-            AND si.user_id LIKE CONCAT('%',#{attendanceInfo.staffId},'%')
+            AND si.user_id = #{attendanceInfo.staffId}
         </if>
         <if test="attendanceInfo.enterpriseId != null and attendanceInfo.enterpriseId != ''">
-            AND ei.user_id LIKE CONCAT('%',#{attendanceInfo.staffId},'%')
+            AND ei.user_id = #{attendanceInfo.enterpriseId}
         </if>
         order by ai.put_take_date desc
     </select>

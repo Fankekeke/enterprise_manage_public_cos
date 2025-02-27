@@ -33,10 +33,10 @@
             AND si.name LIKE CONCAT('%',#{agentInfo.staffName},'%')
         </if>
         <if test="agentInfo.staffId != null and agentInfo.staffId != ''">
-            AND si.user_id LIKE CONCAT('%',#{agentInfo.staffId},'%')
+            AND si.user_id = #{agentInfo.staffId}
         </if>
         <if test="agentInfo.enterpriseId != null and agentInfo.enterpriseId != ''">
-            AND ei.user_id LIKE CONCAT('%',#{agentInfo.staffId},'%')
+            AND ei.user_id = #{agentInfo.enterpriseId}
         </if>
         order by ai.create_date desc
     </select>

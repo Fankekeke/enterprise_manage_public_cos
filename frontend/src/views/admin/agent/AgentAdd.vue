@@ -19,6 +19,30 @@
           </a-form-item>
         </a-col>
         <a-col :span="24">
+          <a-form-item label='指派员工' v-bind="formItemLayout">
+            <a-select style="width: 100%" v-decorator="[
+            'staffId',
+            { rules: [{ required: true, message: '请输入指派员工!' }] }
+            ]" option-label-prop="label">
+              <a-select-option v-for="(item, index) in staffList" :key="index" :value="item.id" :label="item.name">
+                <a-row>
+                  <a-col :span="4">
+                    <a-avatar style="margin-right: 20px" shape="square" :size="40" icon="user" :src="'http://127.0.0.1:9527/imagesWeb/' + item.images.split(',')[0]" />
+                  </a-col>
+                  <a-col :span="20">
+                    <a-row>
+                      <a-col><span>{{item.name}}</span></a-col>
+                      <a-col style="font-size: 10px">
+                        {{item.deptName}} - {{item.positionName}}
+                      </a-col>
+                    </a-row>
+                  </a-col>
+                </a-row>
+              </a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
           <a-form-item label='待办内容' v-bind="formItemLayout">
             <a-textarea :rows="6" v-decorator="[
             'content',
@@ -70,11 +94,20 @@ export default {
       form: this.$form.createForm(this),
       loading: false,
       fileList: [],
+      staffList: [],
       previewVisible: false,
       previewImage: ''
     }
   },
+  mounted () {
+    this.getStaffList()
+  },
   methods: {
+    getStaffList () {
+      this.$get('/cos/staff-info/queryStaffList', {enterpriseId: this.currentUser.userId}).then((r) => {
+        this.staffList = r.data.data
+      })
+    },
     handleCancel () {
       this.previewVisible = false
     },

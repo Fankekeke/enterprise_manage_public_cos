@@ -338,7 +338,7 @@ export default {
       if (params.status === undefined) {
         delete params.status
       }
-      params.teacherId = this.currentUser.userId
+      params.staffId = this.currentUser.userId
       this.$get('/cos/leave-info/page', {
         ...params
       }).then((r) => {

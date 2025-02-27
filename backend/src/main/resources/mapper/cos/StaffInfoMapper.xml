@@ -48,6 +48,9 @@
         <if test="staffInfo.positionId != null and staffInfo.positionId != ''">
             AND si.position_id = #{staffInfo.positionId}
         </if>
+        <if test="staffInfo.enterpriseId != null and staffInfo.enterpriseId != ''">
+            AND ei.user_id = #{staffInfo.enterpriseId}
+        </if>
         order by
         si.create_date desc
     </select>

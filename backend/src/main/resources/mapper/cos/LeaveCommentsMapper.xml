@@ -33,10 +33,10 @@
             AND lc.status = #{leaveComments.status}
         </if>
         <if test="leaveComments.staffId != null and leaveComments.staffId != ''">
-            AND si.user_id LIKE CONCAT('%',#{leaveComments.staffId},'%')
+            AND si.user_id = #{leaveComments.staffId}
         </if>
         <if test="leaveComments.enterpriseId != null and leaveComments.enterpriseId != ''">
-            AND ei.user_id LIKE CONCAT('%',#{leaveComments.staffId},'%')
+            AND ei.user_id = #{leaveComments.enterpriseId}
         </if>
         order by ci.create_date desc
     </select>

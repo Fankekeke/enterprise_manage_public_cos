@@ -78,7 +78,10 @@ public class AgentInfoController {
         agentInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         // 获取员工所属公司
         StaffInfo staffInfo = staffInfoService.getById(agentInfo.getStaffId());
-        agentInfo.setEnterpriseId(staffInfo.getEnterpriseId());
+        if (staffInfo != null) {
+            agentInfo.setEnterpriseId(staffInfo.getEnterpriseId());
+        }
+        agentInfo.setStatus("0");
         return R.ok(agentInfoService.save(agentInfo));
     }
 

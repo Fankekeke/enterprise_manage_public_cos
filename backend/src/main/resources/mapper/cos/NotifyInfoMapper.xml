@@ -37,10 +37,10 @@
             AND si.name LIKE CONCAT('%',#{notifyInfo.staffName},'%')
         </if>
         <if test="notifyInfo.staffId != null and notifyInfo.staffId != ''">
-            AND si.user_id LIKE CONCAT('%',#{notifyInfo.staffId},'%')
+            AND si.user_id = #{notifyInfo.staffId}
         </if>
         <if test="notifyInfo.enterpriseId != null and notifyInfo.enterpriseId != ''">
-            AND ei.user_id LIKE CONCAT('%',#{notifyInfo.staffId},'%')
+            AND ei.user_id = #{notifyInfo.enterpriseId}
         </if>
         order by
         ni.create_date desc

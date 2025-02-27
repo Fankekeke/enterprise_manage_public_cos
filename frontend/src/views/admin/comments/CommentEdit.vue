@@ -1,18 +1,18 @@
 <template>
-  <a-modal v-model="show" title="修改留言" @cancel="onClose" :width="800">
+  <a-modal v-model="show" title="留言查看" @cancel="onClose" :width="800">
     <template slot="footer">
       <a-button key="back" @click="onClose">
         取消
       </a-button>
       <a-button key="submit" type="primary" :loading="loading" @click="handleSubmit">
-        修改
+        已读
       </a-button>
     </template>
     <a-form :form="form" layout="vertical">
       <a-row :gutter="20">
         <a-col :span="24">
           <a-form-item label='内容' v-bind="formItemLayout">
-            <a-textarea :rows="20" v-decorator="[
+            <a-textarea disabled :rows="20" v-decorator="[
             'content',
              { rules: [{ required: true, message: '请输入内容!' }] }
             ]"/>
@@ -28,12 +28,12 @@
               @preview="handlePreview"
               @change="picHandleChange"
             >
-              <div v-if="fileList.length < 8">
-                <a-icon type="plus" />
-                <div class="ant-upload-text">
-                  Upload
-                </div>
-              </div>
+<!--              <div v-if="fileList.length < 8">-->
+<!--                <a-icon type="plus" />-->
+<!--                <div class="ant-upload-text">-->
+<!--                  Upload-->
+<!--                </div>-->
+<!--              </div>-->
             </a-upload>
             <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
               <img alt="example" style="width: 100%" :src="previewImage" />

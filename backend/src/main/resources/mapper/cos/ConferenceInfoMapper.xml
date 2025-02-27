@@ -39,10 +39,10 @@
             AND si.name LIKE CONCAT('%',#{conferenceInfo.staffName},'%')
         </if>
         <if test="conferenceInfo.staffId != null and conferenceInfo.staffId != ''">
-            AND si.user_id LIKE CONCAT('%',#{conferenceInfo.staffId},'%')
+            AND si.user_id = #{conferenceInfo.staffId}
         </if>
         <if test="conferenceInfo.enterpriseId != null and conferenceInfo.enterpriseId != ''">
-            AND ei.user_id LIKE CONCAT('%',#{conferenceInfo.staffId},'%')
+            AND ei.user_id = #{conferenceInfo.enterpriseId}
         </if>
         order by ci.create_date desc
     </select>

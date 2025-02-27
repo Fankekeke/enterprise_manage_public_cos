@@ -258,6 +258,7 @@ export default {
       if (params.readStatus === undefined) {
         delete params.readStatus
       }
+      params.staffId = this.currentUser.userId
       this.$get('/cos/notify-info/page', {
         ...params
       }).then((r) => {

@@ -27,7 +27,7 @@
             AND dept_name LIKE CONCAT('%',#{deptInfo.deptName},'%')
         </if>
         <if test="deptInfo.enterpriseId != null and deptInfo.enterpriseId != ''">
-            AND ei.user_id LIKE CONCAT('%',#{deptInfo.staffId},'%')
+            AND ei.user_id = #{deptInfo.enterpriseId}
         </if>
         order by
         create_date desc

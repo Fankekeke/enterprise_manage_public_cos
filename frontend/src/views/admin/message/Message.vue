@@ -5,22 +5,22 @@
       <a-form layout="horizontal">
         <a-row :gutter="15">
           <div :class="advanced ? null: 'fold'">
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="学生名称"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.expertName"/>
-              </a-form-item>
-            </a-col>
-             <a-col :md="6" :sm="24">
-              <a-form-item
-                label="企业名称"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.enterpriseName"/>
-              </a-form-item>
-            </a-col>
+<!--            <a-col :md="6" :sm="24">-->
+<!--              <a-form-item-->
+<!--                label="员工名称"-->
+<!--                :labelCol="{span: 5}"-->
+<!--                :wrapperCol="{span: 18, offset: 1}">-->
+<!--                <a-input v-model="queryParams.expertName"/>-->
+<!--              </a-form-item>-->
+<!--            </a-col>-->
+<!--             <a-col :md="6" :sm="24">-->
+<!--              <a-form-item-->
+<!--                label="员工名称"-->
+<!--                :labelCol="{span: 5}"-->
+<!--                :wrapperCol="{span: 18, offset: 1}">-->
+<!--                <a-input v-model="queryParams.enterpriseName"/>-->
+<!--              </a-form-item>-->
+<!--            </a-col>-->
           </div>
           <span style="float: right; margin-top: 3px;">
             <a-button type="primary" @click="search">查询</a-button>
@@ -111,47 +111,34 @@ export default {
     }),
     columns () {
       return [{
-        title: '学生名称',
-        dataIndex: 'expertName'
+        title: '员工名称',
+        dataIndex: 'sendUserName'
       }, {
-        title: '企业名称',
-        dataIndex: 'enterpriseName'
+        title: '员工名称',
+        dataIndex: 'takeUserName'
       }, {
-        title: '学生头像',
-        dataIndex: 'expertImages',
+        title: '员工头像',
+        dataIndex: 'sendUserAvatar',
         customRender: (text, record, index) => {
-          if (!record.expertImages) return <a-avatar shape="square" icon="user" />
+          if (!record.sendUserAvatar) return <a-avatar shape="square" icon="user" />
           return <a-popover>
             <template slot="content">
-              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.expertImages } />
+              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.sendUserAvatar } />
             </template>
-            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.expertImages } />
+            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.sendUserAvatar } />
           </a-popover>
         }
       }, {
-        title: '企业头像',
-        dataIndex: 'enterpriseImages',
+        title: '员工头像',
+        dataIndex: 'takeUserAvatar',
         customRender: (text, record, index) => {
-          if (!record.enterpriseImages) return <a-avatar shape="square" icon="user" />
+          if (!record.takeUserAvatar) return <a-avatar shape="square" icon="user" />
           return <a-popover>
             <template slot="content">
-              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.enterpriseImages } />
+              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.takeUserAvatar } />
             </template>
-            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.enterpriseImages } />
+            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.takeUserAvatar } />
           </a-popover>
-        }
-      }, {
-        title: '消息类型',
-        dataIndex: 'type',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case 1:
-              return <a-tag>学生</a-tag>
-            case 2:
-              return <a-tag>企业</a-tag>
-            default:
-              return '- -'
-          }
         }
       }, {
         title: '消息内容',
@@ -195,7 +182,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/chat-info/' + ids).then(() => {
+          that.$delete('/cos/message-info/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -268,7 +255,7 @@ export default {
       if (params.readStatus === undefined) {
         delete params.readStatus
       }
-      this.$get('/cos/chat-info/page', {
+      this.$get('/cos/message-info/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

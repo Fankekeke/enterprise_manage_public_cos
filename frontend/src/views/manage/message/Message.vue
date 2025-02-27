@@ -5,26 +5,22 @@
       <a-form layout="horizontal">
         <a-row :gutter="15">
           <div :class="advanced ? null: 'fold'">
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="员工姓名"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.teacherName"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="审批状态"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.status">
-                  <a-select-option value="0">未审批</a-select-option>
-                  <a-select-option value="1">通过</a-select-option>
-                  <a-select-option value="2">驳回</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
+<!--            <a-col :md="6" :sm="24">-->
+<!--              <a-form-item-->
+<!--                label="员工名称"-->
+<!--                :labelCol="{span: 5}"-->
+<!--                :wrapperCol="{span: 18, offset: 1}">-->
+<!--                <a-input v-model="queryParams.expertName"/>-->
+<!--              </a-form-item>-->
+<!--            </a-col>-->
+<!--             <a-col :md="6" :sm="24">-->
+<!--              <a-form-item-->
+<!--                label="员工名称"-->
+<!--                :labelCol="{span: 5}"-->
+<!--                :wrapperCol="{span: 18, offset: 1}">-->
+<!--                <a-input v-model="queryParams.enterpriseName"/>-->
+<!--              </a-form-item>-->
+<!--            </a-col>-->
           </div>
           <span style="float: right; margin-top: 3px;">
             <a-button type="primary" @click="search">查询</a-button>
@@ -35,7 +31,7 @@
     </div>
     <div>
       <div class="operator">
-        <a-button type="primary" ghost @click="add">添加财务申请</a-button>
+        <!--        <a-button type="primary" ghost @click="add">新增</a-button>-->
         <a-button @click="batchDelete">删除</a-button>
       </div>
       <!-- 表格区域 -->
@@ -48,62 +44,49 @@
                :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
                :scroll="{ x: 900 }"
                @change="handleTableChange">
+        <template slot="avatarShow" slot-scope="text, record">
+          <template>
+            <img alt="头像" :src="'static/avatar/' + text">
+          </template>
+        </template>
         <template slot="contentShow" slot-scope="text, record">
           <template>
             <a-tooltip>
               <template slot="title">
-                {{ record.auditTitle }}
+                {{ record.content }}
               </template>
-              {{ record.auditTitle.slice(0, 20) }} ...
+              {{ record.content.slice(0, 30) }} ...
             </a-tooltip>
           </template>
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-icon type="file-search" @click="memberViewOpen(record)" title="详 情" style="margin-left: 15px"></a-icon>
         </template>
       </a-table>
     </div>
-    <member-view
-      @close="handlememberViewClose"
-      :memberShow="memberView.visiable"
-      :memberData="memberView.data">
-    </member-view>
-    <classes-add
-      v-if="classesAdd.visiable"
-      @close="handleclassesAddClose"
-      @success="handleclassesAddSuccess"
-      :classesAddVisiable="classesAdd.visiable">
-    </classes-add>
+    <user-view
+      @close="handleUserViewClose"
+      :userShow="userView.visiable"
+      :userData="userView.data">
+    </user-view>
   </a-card>
 </template>
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import memberView from './FinanceView.vue'
-import classesAdd from './FinanceAdd.vue'
 import {mapState} from 'vuex'
 import moment from 'moment'
 moment.locale('zh-cn')
 
 export default {
-  name: 'member',
-  components: {memberView, RangeDate, classesAdd},
+  name: 'User',
+  components: {RangeDate},
   data () {
     return {
-      advanced: false,
-      memberAdd: {
-        visiable: false
-      },
-      classesAdd: {
-        visiable: false
-      },
-      memberEdit: {
-        visiable: false
-      },
-      memberView: {
+      userView: {
         visiable: false,
         data: null
       },
+      advanced: false,
       queryParams: {},
       filteredInfo: null,
       sortedInfo: null,
@@ -128,77 +111,42 @@ export default {
     }),
     columns () {
       return [{
-        title: '用户名称',
-        ellipsis: true,
-        dataIndex: 'staffName'
+        title: '员工名称',
+        dataIndex: 'sendUserName'
+      }, {
+        title: '员工名称',
+        dataIndex: 'takeUserName'
       }, {
         title: '员工头像',
-        dataIndex: 'staffImages',
+        dataIndex: 'sendUserAvatar',
         customRender: (text, record, index) => {
-          if (!record.staffImages) return <a-avatar shape="square" icon="user" />
+          if (!record.sendUserAvatar) return <a-avatar shape="square" icon="user" />
           return <a-popover>
             <template slot="content">
-              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.staffImages.split(',')[0] } />
+              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.sendUserAvatar } />
             </template>
-            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.staffImages.split(',')[0] } />
+            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.sendUserAvatar } />
           </a-popover>
         }
       }, {
-        title: '所属部门',
-        ellipsis: true,
-        dataIndex: 'deptName'
-      }, {
-        title: '职位',
-        ellipsis: true,
-        dataIndex: 'positionName'
-      }, {
-        title: '所属公司',
-        ellipsis: true,
-        dataIndex: 'enterpriseName'
-      }, {
-        title: '财务内容',
-        dataIndex: 'auditTitle',
-        ellipsis: true
-      }, {
-        title: '审批状态',
-        dataIndex: 'status',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case '0':
-              return <a-tag>未审批</a-tag>
-            case '1':
-              return <a-tag>通过</a-tag>
-            case '2':
-              return <a-tag>驳回</a-tag>
-            default:
-              return '- -'
-          }
+        title: '员工头像',
+        dataIndex: 'takeUserAvatar',
+        customRender: (text, record, index) => {
+          if (!record.takeUserAvatar) return <a-avatar shape="square" icon="user" />
+          return <a-popover>
+            <template slot="content">
+              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.takeUserAvatar } />
+            </template>
+            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.takeUserAvatar } />
+          </a-popover>
         }
       }, {
-        title: '申请金额',
-        dataIndex: 'totalPrice',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
+        title: '消息内容',
+        dataIndex: 'content',
+        scopedSlots: {customRender: 'contentShow'}
       }, {
-        title: '创建时间',
-        dataIndex: 'createDate',
-        ellipsis: true,
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '操作',
-        dataIndex: 'operation',
-        scopedSlots: {customRender: 'operation'}
+        title: '发送时间',
+        dataIndex: 'createDate'
       }]
     }
   },
@@ -206,49 +154,18 @@ export default {
     this.fetch()
   },
   methods: {
-    add () {
-      this.classesAdd.visiable = true
+    view (row) {
+      this.userView.data = row
+      this.userView.visiable = true
     },
-    handleclassesAddClose () {
-      this.classesAdd.visiable = false
-    },
-    handleclassesAddSuccess () {
-      this.classesAdd.visiable = false
-      this.$message.success('新增财务成功')
-      this.search()
+    handleUserViewClose () {
+      this.userView.visiable = false
     },
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     },
     toggleAdvanced () {
       this.advanced = !this.advanced
-    },
-    handlememberAddClose () {
-      this.memberAdd.visiable = false
-    },
-    handlememberAddSuccess () {
-      this.memberAdd.visiable = false
-      this.$message.success('新增财务成功')
-      this.search()
-    },
-    edit (record) {
-      this.$refs.memberEdit.setFormValues(record)
-      this.memberEdit.visiable = true
-    },
-    memberViewOpen (row) {
-      this.memberView.data = row
-      this.memberView.visiable = true
-    },
-    handlememberViewClose () {
-      this.memberView.visiable = false
-    },
-    handlememberEditClose () {
-      this.memberEdit.visiable = false
-    },
-    handlememberEditSuccess () {
-      this.memberEdit.visiable = false
-      this.$message.success('修改财务成功')
-      this.search()
     },
     handleDeptChange (value) {
       this.queryParams.deptId = value || ''
@@ -265,7 +182,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/finance-info/' + ids).then(() => {
+          that.$delete('/cos/message-info/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -335,11 +252,10 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      if (params.status === undefined) {
-        delete params.status
+      if (params.readStatus === undefined) {
+        delete params.readStatus
       }
-      params.staffId = this.currentUser.userId
-      this.$get('/cos/finance-info/page', {
+      this.$get('/cos/message-info/page', {
         ...params
       }).then((r) => {
         let data = r.data.data
