@@ -23,4 +23,12 @@ public interface IAgentInfoService extends IService<AgentInfo> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> queryAgentPage(Page<AgentInfo> page, AgentInfo agentInfo);
+
+    /**
+     * 主页数据
+     *
+     * @param enterpriseId 企业ID
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> homeData(Integer enterpriseId);
 }

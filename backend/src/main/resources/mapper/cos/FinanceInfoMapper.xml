@@ -7,6 +7,7 @@
         select
         ci.id,
         ci.staff_id,
+        ci.code,
         ci.audit_title,
         ci.content,
         ci.status,

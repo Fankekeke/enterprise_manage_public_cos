@@ -65,6 +65,17 @@ public class FinanceInfoController {
     }
 
     /**
+     * 订单支付回调
+     *
+     * @param orderCode 订单编号
+     * @return 结果
+     */
+    @GetMapping("/payment")
+    public R payment(String orderCode) {
+        return R.ok(financeInfoService.update(Wrappers.<FinanceInfo>lambdaUpdate().set(FinanceInfo::getStatus, "1").eq(FinanceInfo::getCode, orderCode)));
+    }
+
+    /**
      * 查询财务申请详情
      *
      * @param id 主键ID
@@ -99,6 +110,8 @@ public class FinanceInfoController {
             // 设置所属公司
             financeInfo.setEnterpriseId(staffInfo.getEnterpriseId());
         }
+        // 申请单号
+        financeInfo.setCode("FIN-" + System.currentTimeMillis());
         financeInfo.setStatus("0");
         financeInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         // 添加通知

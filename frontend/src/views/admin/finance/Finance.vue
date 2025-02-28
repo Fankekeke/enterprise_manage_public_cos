@@ -65,6 +65,7 @@
     </div>
     <member-view
       @close="handlememberViewClose"
+      @success="handlememberViewSuccess"
       :memberShow="memberView.visiable"
       :memberData="memberView.data">
     </member-view>
@@ -241,6 +242,11 @@ export default {
     },
     handlememberViewClose () {
       this.memberView.visiable = false
+    },
+    handlememberViewSuccess () {
+      this.memberView.visiable = false
+      this.$message.success('审核成功')
+      this.search()
     },
     handlememberEditClose () {
       this.memberEdit.visiable = false

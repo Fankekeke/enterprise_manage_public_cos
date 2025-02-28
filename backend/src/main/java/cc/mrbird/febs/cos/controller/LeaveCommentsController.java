@@ -46,6 +46,20 @@ public class LeaveCommentsController {
     }
 
     /**
+     * 设置留言状态
+     *
+     * @param id     主键
+     * @param status 状态
+     * @return 结果
+     */
+    @GetMapping("/setViewStatus")
+    public R setViewStatus(Integer id, String status) {
+        LeaveComments leaveComments = leaveCommentsService.getById(id);
+        leaveComments.setStatus(status);
+        return R.ok(leaveCommentsService.updateById(leaveComments));
+    }
+
+    /**
      * 获取留言信息
      *
      * @return 结果
@@ -81,6 +95,7 @@ public class LeaveCommentsController {
             leaveComments.setEnterpriseId(staffInfo.getEnterpriseId());
         }
         leaveComments.setCreateDate(DateUtil.formatDateTime(new Date()));
+        leaveComments.setStatus("0");
         return R.ok(leaveCommentsService.save(leaveComments));
     }
 

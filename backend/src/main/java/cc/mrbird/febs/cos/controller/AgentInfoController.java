@@ -81,6 +81,17 @@ public class AgentInfoController {
     }
 
     /**
+     * 主页数据
+     *
+     * @param enterpriseId 企业ID
+     * @return 结果
+     */
+    @GetMapping("/homeData")
+    public R homeData(@RequestParam(value = "enterpriseId", required = false) Integer enterpriseId) {
+        return R.ok(agentInfoService.homeData(enterpriseId));
+    }
+
+    /**
      * 新增代办任务
      *
      * @param agentInfo 代办任务

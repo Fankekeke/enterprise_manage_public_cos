@@ -90,6 +90,9 @@ export default {
     }
   },
   methods: {
+    setViewStatus (id) {
+      this.$get('/cos/leave-comments/setViewStatus', {id, status: 1}).then((r) => {})
+    },
     handleCancel () {
       this.previewVisible = false
     },
@@ -126,6 +129,7 @@ export default {
           obj[key] = comment[key]
         }
       })
+      this.setViewStatus(comment.id)
       this.form.setFieldsValue(obj)
     },
     reset () {
@@ -148,7 +152,7 @@ export default {
       })
       this.form.validateFields((err, values) => {
         values.id = this.rowId
-        values.images = images.length > 0 ? images.join(',') : null
+        values.status = 1
         if (!err) {
           this.loading = true
           this.$put('/cos/leave-comments', {

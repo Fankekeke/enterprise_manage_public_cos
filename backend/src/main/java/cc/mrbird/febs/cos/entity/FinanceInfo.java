@@ -34,6 +34,7 @@ public class FinanceInfo implements Serializable {
      * 申请标题
      */
     private String auditTitle;
+    private String code;
 
     private String totalPrice;
 
