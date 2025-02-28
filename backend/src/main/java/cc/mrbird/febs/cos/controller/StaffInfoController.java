@@ -6,6 +6,7 @@ import cc.mrbird.febs.cos.entity.EnterpriseInfo;
 import cc.mrbird.febs.cos.entity.StaffInfo;
 import cc.mrbird.febs.cos.service.IEnterpriseInfoService;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
+import cc.mrbird.febs.system.service.UserService;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,6 +28,8 @@ public class StaffInfoController {
     private final IStaffInfoService staffInfoService;
 
     private final IEnterpriseInfoService enterpriseInfoService;
+
+    private final UserService userService;
 
     /**
      * 分页获取员工信息
@@ -112,13 +115,16 @@ public class StaffInfoController {
      * @return 结果
      */
     @PostMapping
-    public R save(StaffInfo staffInfo) {
+    public R save(StaffInfo staffInfo) throws Exception {
         staffInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
-        staffInfo.setCode("STA-" + System.currentTimeMillis());
+        staffInfo.setCode("STF-" + System.currentTimeMillis());
+
         // 设置所属公司
         EnterpriseInfo enterpriseInfo = enterpriseInfoService.getOne(Wrappers.<EnterpriseInfo>lambdaQuery().eq(EnterpriseInfo::getUserId, staffInfo.getEnterpriseId()));
         staffInfo.setEnterpriseId(enterpriseInfo.getId());
-        return R.ok(staffInfoService.save(staffInfo));
+
+        userService.registStaff(staffInfo.getCode(), "1234qwer", staffInfo);
+        return R.ok(true);
     }
 
     /**

@@ -234,6 +234,7 @@ export default {
         }
         if (!err) {
           values.images = images.length > 0 ? images.join(',') : null
+          values.enterpriseId = this.currentUser.userId
           this.loading = true
           this.$post('/cos/staff-info', {
             ...values

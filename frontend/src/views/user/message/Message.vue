@@ -28,7 +28,7 @@
             :data-source="chatList"
           >
             <a-list-item slot="renderItem" slot-scope="item, index">
-              <a-comment style="margin-left: 25px" :author="item.takeUserId == user.userId ? item.takeUserName : item.sendUserName" :avatar="'http://127.0.0.1:9527/imagesWeb/' + (item.takeUserId == user.userId ? item.takeUserAvatar.split(',')[0] : item.sendUserAvatar.split(',')[0])">
+              <a-comment style="margin-left: 25px" :author="(checkUserName(item))" :avatar="'http://127.0.0.1:9527/imagesWeb/' + (checkUserImages(item))">
                 <p slot="content">
                   {{ item.content }}
                 </p>
@@ -38,7 +38,7 @@
               </a-comment>
             </a-list-item>
           </a-list>
-          <a-comment v-if="chatList.length !== 0">
+          <a-comment v-if="currentItem != null">
             <div slot="content">
               <a-form-item>
                 <a-textarea :rows="4" v-model="contentValue"/>
@@ -80,6 +80,22 @@ export default {
     this.queryStaffList()
   },
   methods: {
+    checkUserName (item) {
+      if (item.sendUserId == this.user.userId) {
+        return item.sendUserName
+      }
+      if (item.takeUserId == this.user.userId) {
+        return item.sendUserName
+      }
+    },
+    checkUserImages (item) {
+      if (item.sendUserId == this.user.userId) {
+        return item.sendUserAvatar.split(',')[0]
+      }
+      if (item.takeUserId == this.user.userId) {
+        return item.sendUserAvatar.split(',')[0]
+      }
+    },
     queryStaffList () {
       this.$get(`/cos/staff-info/queryStaffList/staff`, {
         staffId: this.user.userId

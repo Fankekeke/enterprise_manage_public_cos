@@ -70,74 +70,6 @@
         </div>
       </a-col>
     </a-row>
-    <a-row style="margin-top: 15px" v-if="user.roleId == 74 || user.roleId == 76">
-      <a-col :span="12">
-        <div hoverable :bordered="false" style="width: 100%">
-          <a-skeleton active v-if="loading" />
-          <apexchart  v-if="!loading" type="line" height="300" :options="chartOptions2" :series="series2"></apexchart>
-        </div>
-      </a-col>
-      <a-col :span="12">
-        <div hoverable :bordered="false" style="width: 100%">
-          <a-skeleton active v-if="loading" />
-          <apexchart v-if="!loading" type="bar" height="300" :options="chartOptions3" :series="series3"></apexchart>
-        </div>
-      </a-col>
-    </a-row>
-    <a-col :span="24">
-      <div style="background: #ECECEC; padding: 30px;" v-if="user.roleId == 74 || user.roleId == 76">
-        <a-row :gutter="16">
-          <a-col :span="6">
-            <a-card hoverable>
-              <a-row>
-                <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本年出库数量</a-col>
-                <a-col :span="4"><a-icon type="arrow-up" style="font-size: 30px;margin-top: 3px"/></a-col>
-                <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
-                  {{ titleData.yearOutNum }}
-                  <span style="font-size: 20px;margin-top: 3px">单</span>
-                </a-col>
-              </a-row>
-            </a-card>
-          </a-col>
-          <a-col :span="6">
-            <a-card hoverable>
-              <a-row>
-                <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本年出库收益</a-col>
-                <a-col :span="4"><a-icon type="arrow-up" style="font-size: 30px;margin-top: 3px"/></a-col>
-                <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
-                  {{ titleData.yearOutPrice }}
-                  <span style="font-size: 20px;margin-top: 3px">元</span>
-                </a-col>
-              </a-row>
-            </a-card>
-          </a-col>
-          <a-col :span="6">
-            <a-card hoverable>
-              <a-row>
-                <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本年入库数量</a-col>
-                <a-col :span="4"><a-icon type="arrow-up" style="font-size: 30px;margin-top: 3px"/></a-col>
-                <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
-                  {{ titleData.monthPutNum }}
-                  <span style="font-size: 20px;margin-top: 3px">单</span>
-                </a-col>
-              </a-row>
-            </a-card>
-          </a-col>
-          <a-col :span="6">
-            <a-card hoverable>
-              <a-row>
-                <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本年入库支出</a-col>
-                <a-col :span="4"><a-icon type="arrow-up" style="font-size: 30px;margin-top: 3px"/></a-col>
-                <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
-                  {{ titleData.monthPutPrice }}
-                  <span style="font-size: 20px;margin-top: 3px">元</span>
-                </a-col>
-              </a-row>
-            </a-card>
-          </a-col>
-        </a-row>
-      </div>
-    </a-col>
     <a-row style="margin-top: 15px">
       <a-col :span="24">
         <a-card hoverable :loading="loading" :bordered="false" title="公告信息" style="margin-top: 15px">
@@ -351,7 +283,7 @@ export default {
   },
   methods: {
     selectHomeData () {
-      this.$get('/cos/order-info/homeData').then((r) => {
+      this.$get('/cos/agent-info/homeData', {enterpriseId: this.user.roleId == 76 ? this.user.userId : null}).then((r) => {
         // let titleData = { outNum: r.data.outNum, putNum: r.data.putNum, orderPrice: r.data.orderPrice, registerNum: r.data.registerNum }
         // this.$emit('setTitle', titleData)
         this.titleData.orderNumMonth = r.data.orderNumMonth
@@ -376,7 +308,7 @@ export default {
         this.series1[0].data = r.data.orderNumDays.map(obj => { return obj.count })
         this.chartOptions1.xaxis.categories = r.data.orderNumDays.map(obj => { return obj.days })
 
-        this.series[0].data = r.data.orderAmountDays.map(obj => { return obj.price })
+        this.series[0].data = r.data.orderAmountDays.map(obj => { return obj.count })
         this.chartOptions.xaxis.categories = r.data.orderAmountDays.map(obj => { return obj.days })
 
         // if (r.data.putNumWithinDays !== null && r.data.putNumWithinDays.length !== 0) {

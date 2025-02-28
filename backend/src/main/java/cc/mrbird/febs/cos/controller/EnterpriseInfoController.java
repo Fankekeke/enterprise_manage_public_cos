@@ -5,6 +5,7 @@ import cc.mrbird.febs.common.utils.FileDownloadUtils;
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.EnterpriseInfo;
 import cc.mrbird.febs.cos.service.IEnterpriseInfoService;
+import cc.mrbird.febs.system.service.UserService;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,6 +28,8 @@ import java.util.List;
 public class EnterpriseInfoController {
 
     private final IEnterpriseInfoService enterpriseInfoService;
+
+    private final UserService userService;
 
     /**
      * 分页获取企业信息信息
@@ -130,8 +133,10 @@ public class EnterpriseInfoController {
      * @return 结果
      */
     @PostMapping
-    public R save(EnterpriseInfo enterpriseInfo) {
-        return R.ok(enterpriseInfoService.save(enterpriseInfo));
+    public R save(EnterpriseInfo enterpriseInfo) throws Exception {
+        enterpriseInfo.setCode("ERP-" + System.currentTimeMillis());
+        userService.registEnterprise(enterpriseInfo.getCode(), "1234qwer", enterpriseInfo);
+        return R.ok(true);
     }
 
     /**
